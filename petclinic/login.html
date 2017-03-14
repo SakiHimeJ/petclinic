@@ -25,6 +25,51 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+  base_url = "http://api.petclinic.com";
+  $(document).ready(function(){
+    $("#login_form").submit(function(){
+      //禁用form默认提交，使用ajax提交
+      return false;
+    });
+    $("#login_button").click(function(){
+      //form的button真正触发事件
+      username = $("#login_form").find("[name='username']").val();
+      password = $("#login_form").find("[name='password']").val();
+      if(username == "" || password == ""){
+        alert("用户名或密码不能为空");
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: base_url + "/login",
+        data: {username:username, password:password},
+        dataType: "json",
+        success: function(data){
+                    switch(data.status){
+                      case 200:
+                        token = data.token;
+                        alert("登陆成功");
+                        location.href = "index.html?&token="+token;
+                        return;
+                      case 401:
+                        alert(data.message);
+                        return;
+                      case 0:
+                        alert(data.message);
+                        return;
+                      default:
+                        alert("网络异常");
+                        return;
+                    }
+                 },
+        error: function(data){
+                    alert("服务器出现未知错误");
+                 }
+      });
+    });
+  });
+</script>
 </head>
 <body id="login">
   <div class="login-logo" style="padding-top:200px">
@@ -32,16 +77,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   </div>
   <h2 class="form-heading" style="color:white">登陆</h2>
   <div class="app-cam">
-	  <form class="form-horizontal">
-		<input type="text" class="text" value="请输入用户名" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '请输入用户名';}">
-		<input type="password" value="请输入密码" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '请输入密码';}">
+	  <form class="form-horizontal" id="login_form">
+		<input type="text" name="username" class="text" placeholder="请输入用户名" value="">
+		<input type="password" name="password" placeholder="请输入密码" value="">
 		<div class="form-group" style>
       <div class="col-sm-12">
         <div class="radio-inline"><label><input name="user_type" type="radio" checked="checked"> 实习生 </label></div>
         <div class="radio-inline"><label><input name="user_type" type="radio"> 管理员 </label></div>
       </div>
     </div>
-    <div class="submit"><input type="submit" onclick="myFunction()" value="登陆"></div>
+    <div class="submit"><input type="submit" id="login_button" value="登陆"></div>
     
 		<ul class="new">
 			<li class="new_left"><p><a href="#">忘记密码 ?</a></p></li>
