@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
+<title>虚拟宠物医院</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
@@ -25,6 +25,41 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
+<script>
+  var base_url = 'http://121.42.33.171:8765';
+  $(document).ready(function(){
+    $.ajax({
+      type:'GET',
+      url:base_url+'/user',
+      data:{},
+      dataType:'json',
+      success:function(data){
+        alert(data);
+        console.log(data);
+        var obj = eval('(' + data + ')');
+        for (i = 0;i < obj.length;i ++){
+          var user = obj[i];
+          var tr = $('<tr class="active"></tr>');
+          var th = $('<th scope="row">'+(i+1)+'</th>');
+          var td_name = $('<td>'+user.user_name+'</td>');
+          var td_button = $('<td></td>');
+          var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" val="'+user.id+'">编辑</button>');
+          var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" val="'+user.id+'">删除</button>');
+          tr.append(th);
+          tr.append(td_name);
+          td_button.append(btn_edit);
+          td_button.append(btn_delete);
+          tr.append(td_button);
+          $("#user_table").append(tr);
+        }
+      },
+      error:function(data){
+        alert('服务器发生未知错误');
+      }
+    });
+  });
+
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -128,37 +163,56 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
               <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
             </form>
             <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="usermanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>用户信息管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="casemanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>病例管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="tabletmanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>药品管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="officemanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>科室管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="documentmanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>档案管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+            <li>
+                <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse in">
+                    <li>
+                        <a href="guide.html">医院3D导览</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse in">
+                            <li>
+                                <a href="#">角色扮演</a>
+                            </li>
+                            <li>
+                                <a href="#">病例学习</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="case_manage.html">病例管理</a>
+                    </li>
+                    <li>
+                        <a href="tablet_manage.html">药品管理</a>
+                    </li>
+                    <li>
+                        <a href="fee_manage.html">收费管理</a>
+                    </li>
+                    <li>
+                        <a href="doc_manage.html">档案管理</a>
+                    </li>
+                    <li>
+                        <a href="office_manage.html">科室管理</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>
             <!-- /.navbar-static-side -->
         </nav>
         <div id="page-wrapper">
@@ -178,112 +232,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div>
         <div class="checkbox-inline"><label><input type="checkbox"> 有效</label></div>
         <div class="checkbox-inline" style="padding-right: 20px;"><label><input type="checkbox" checked="">无效</label></div>
-        <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button>
+        <a href ="new_user.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
         <div class="clearfix"> </div>
     <table class="table">
       <thead>
         <tr>
-          <th>#</th>
+          <th>用户ID</th>
           <th>用户名</th>
-          <th>用户密码</th>
-          <th>权限</th>
           <th>操作</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="active">
-          <th scope="row">1</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-
-          <th scope="row">2</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="success">
-          <th scope="row">3</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">4</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="info">
-          <th scope="row">5</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">6</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="warning">
-          <th scope="row">7</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">8</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="danger">
-          <th scope="row">9</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
+      <tbody id="user_table">
+        
       </tbody>
     </table>
     <div>

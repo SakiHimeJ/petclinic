@@ -34,13 +34,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     });
     $("#depart_cancel").click(function()
     {
-      $(".input").val("");
+      $("#officename").val("");
+      $("#officetype").val("");
+      $("#officedesc").val("");
     });
     $("#depart_submit").click(function(){
       //form的button真正触发事件
       depart_name = $("#depart_form").find("[id='officename']").val();
       depart_type = $("#depart_form").find("[id='officetype']").val();
-      depart_desc = $("#depart_form").find("[id='officesite']").val();
+      depart_desc = $("#depart_form").find("[id='officedesc']").val();
       if(depart_name == "" || depart_type == "" || depart_desc ==""){
         alert("输入必填项");
         return;
@@ -48,12 +50,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       $.ajax({
         type: "POST",
         url: base_url + "/depart",
-        data: {depart_name:depart_name, depart_type:depart_type, depart_desc:depart_type},
+        data: {depart_name:depart_name, depart_type:depart_type, depart_desc:depart_desc},
         dataType: "json",
         success: function(data){
                     switch(data.status){
                       case 200:
-                        alert(data.depart_name+data.depart_type+data.depart_desc);
+                        alert("添加成功");
                         return;
                       case 401:
                         alert(data.message);
@@ -177,39 +179,56 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
               <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
             </form>
             <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                       
-                        <li>
-                            <a href="usermanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>用户信息管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                         <li>
-                            <a href="casemanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>病例管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="tabletmanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>药品管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="officemanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>科室管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="documentmanagement.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>档案管理</a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
-                        
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+            <li>
+                <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse in">
+                    <li>
+                        <a href="guide.html">医院3D导览</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse in">
+                            <li>
+                                <a href="#">角色扮演</a>
+                            </li>
+                            <li>
+                                <a href="#">病例学习</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="case_manage.html">病例管理</a>
+                    </li>
+                    <li>
+                        <a href="tablet_manage.html">药品管理</a>
+                    </li>
+                    <li>
+                        <a href="fee_manage.html">收费管理</a>
+                    </li>
+                    <li>
+                        <a href="doc_manage.html">档案管理</a>
+                    </li>
+                    <li>
+                        <a href="office_manage.html">科室管理</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>
             <!-- /.navbar-static-side -->
         </nav>
         <div id="page-wrapper">
@@ -231,11 +250,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>  
                 </div>
                 <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">科室坐标:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="officesite" placeholder="Default Input">
+                  <label for="disabledinput" class="col-sm-2 control-label">科室描述:</label>
+                  <div class="col-sm-8">
+                       <textarea name="txtarea1" cols="50" rows="4" class="form-control11" id="officedesc"></textarea></div>
                   </div>
-                </div>
                 <div class="row"><div class="col-sm-2 col-sm-offset-5">
                       <button class="btn-success btn" id="depart_submit">Submit</button>
                       <button class="btn-default btn" id="depart_cancel">Cancel</button>

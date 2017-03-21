@@ -7,9 +7,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
+<title>虚拟宠物医院</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
@@ -25,6 +25,54 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+  base_url = "http://api.petclinic.com";
+  $(document).ready(function(){
+    $("#user_form").submit(function(){
+      //禁用form默认提交，使用ajax提交
+      return false;
+    });
+    $("#user_cancel").click(function()
+    {
+      $("#username").val("");
+      $("#password").val("");
+    });
+    $("#user_submit").click(function(){
+      //form的button真正触发事件
+      username = $("#user_form").find("[id='username']").val();
+      password = $("#user_form").find("[id='password']").val();
+      if(username == "" || password == "" ){
+        alert("输入必填项");
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: base_url + "/user",
+        data: {username:username, password:password},
+        dataType: "json",
+        success: function(data){
+                    switch(data.status){
+                      case 200:
+                        alert("添加成功");
+                        return;
+                      case 401:
+                        alert(data.message);
+                        return;
+                      case 0:
+                        alert(data.message);
+                        return;
+                      default:
+                        alert("网络异常");
+                        return;
+                    }
+                 },
+        error: function(data){
+                    alert("服务器出现未知错误");
+                 }
+      });
+    });
+  });
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -176,172 +224,43 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <!-- /.nav-second-level -->
             </li>
         </ul>
-    </div
+    </div>
     <!-- /.sidebar-collapse -->
 </div>
             <!-- /.navbar-static-side -->
         </nav>
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
-	   <div class="xs">
-  	 <h3>病例管理>>新增病例</h3>
+       <div class="xs">
+     <h3>档案管理>>新增用户</h3>
      <div>
-       <form class="form-horizontal">
+       <form class="form-horizontal" id="user_form">
                 <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">病例ID:</label>
+                  <label for="disabledinput" class="col-sm-2 control-label">用户姓名:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="focusedinput" placeholder="Default Input">
-                  </div>  
-                </div>
-                <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">疾病名称:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="focusedinput" placeholder="Default Input">
+                    <input type="text" class="form-control1" id="username" placeholder="Default Input">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="radio" class="col-sm-2 control-label">有效性:</label>
-                  <div class="col-sm-8">
-                    <div class="radio-inline"><label><input type="radio" name="ok"> 有效</label></div>
-                    <div class="radio-inline"><label><input type="radio" name="ok">无效</label></div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">病例类别:</label>
+                  <label for="focusedinput" class="col-sm-2 control-label">用户密码:</label>
                   <div class="col-sm-4">
-                    <select class="form-control1">
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="opel">Opel</option>
-  <option value="audi">Audi</option>
-</select>
-                  </div>  
+                    <input type="text" class="form-control1" id="password" placeholder="Default Input">
+                </div>  
                 </div>
+                <div class="row"><div class="col-sm-2 col-sm-offset-5">
+                      <button class="btn-success btn" id="user_submit">Submit</button>
+                      <button class="btn-default btn" id="user_cancel">Cancel</button>
+          </div></div>
           </form>
                 <hr></hr> 
-          <form class="form-horizontal">
-                <div class="form-group">
-                  <button  type='button' id="addcheckInf" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheckinf')">添加接诊信息</button>
-                </div>
-                <div id="newcheckinf" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">病例接诊</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-                <div class="row"><div class="col-sm-6 col-sm-offset-1">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                 <hr></hr>
-          </form>
-                    <form class="form-horizontal">
-                <div class="form-group">
-                  <button type="button" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheck')">添加病例检查</button>
-                </div>  
-                <div id="newcheck" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">病例检查</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-               <div class="row"><div class="col-sm-6 col-sm-offset-1">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                 <hr></hr>
-          </form>
-                    <form class="form-horizontal">
-                <div class="form-group">
-                  <button type="button" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheck1')">添加诊断结果</button>
-                </div>  
-                <div id="newcheck1" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">诊断</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-                <div class="row"><div class="col-sm-6 col-sm-offset-1">
-                      <button type="button" class="btn-success btn">Submit</button>
-                      <button type="button" class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                 <hr></hr>
-          </form>
-                <form class="form-horizontal">
-                <div class="form-group">
-                  <button type="button" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheckolan')">添加治疗方案</button>
-                </div>  
-                <div id="newcheckplan" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">治疗方案</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-                <div class="row"><div class="col-sm-2 col-sm-offset-1">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                <hr></hr>
-          </form>
-          <div class="row"><div class="col-sm-2 col-sm-offset-5">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-          </div></div>
+        
      </div>
     </table>
    </div>
       </tbody>
     </table>
 
-			</div>
+            </div>
     </div><!-- /.table-responsive -->
     </div><!-- /.table-responsive -->
   </div>
