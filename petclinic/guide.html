@@ -25,6 +25,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Graph JavaScript -->
 <script src="js/d3.v3.js"></script>
 <script src="js/rickshaw.js"></script>
+<script type="text/javascript">
+	window.onresize = function(){
+		var width = parseFloat($('#3dframe').css('width'));
+		var height = width / 3.0;
+		$('#3dframe').css('height',height);
+	}
+	$(document).ready(function(){
+		var width = parseFloat($('#3dframe').css('width'));
+		var height = width / 3.0;
+		$('#3dframe').css('height',height);
+	});
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -184,7 +196,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div class="graphs">
 	  <div class="span_11">
 		<div class="col-md-12 col_4">
-		  <iframe width = "100%" height="800" allowfullscreen style="border-style:none;" src="pannellum/src/standalone/pannellum.htm?config=../../guide-config.json"></iframe>
+		  <iframe id="3dframe" width="100%" allowfullscreen style="border-style:none;" src="pannellum/src/standalone/pannellum.htm?config=../../guide-config.json"></iframe>
 		</div>
        </div>
        <div class="clearfix"> </div>
