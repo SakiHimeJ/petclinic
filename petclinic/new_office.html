@@ -28,6 +28,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script type="text/javascript">
   base_url = "http://api.petclinic.com";
   $(document).ready(function(){
+    var urlinfo = window.location.href; //获取url
+    var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
+    //console.log(paramlist);
+    var params = {};
+    if(paramlist.length > 0){
+      for(i = 0;i < paramlist.length;i ++){
+        kv = paramlist[i]
+        key = kv.split("=")[0];
+        value = kv.split("=")[1];
+        params[key] = value;
+      }
+    }
+    console.log(params);
     $("#depart_form").submit(function(){
       //禁用form默认提交，使用ajax提交
       return false;

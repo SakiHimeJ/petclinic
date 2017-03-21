@@ -19,15 +19,40 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="css/style.css" rel='stylesheet' type='text/css' />
 <link href="css/font-awesome.css" rel="stylesheet"> 
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
-<!----webfonts--->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
-<!---//webfonts--->  
+<script src="js/jquery.min.js"></script> 
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
+  var base_url = '121.42.33.171:8765';
+  var type_list = ['第一种科室','第二种科室']; //from db
+  var test_data = '[{"id":1,"depart_name":"office1","depart_type":0,"depart_desc":" office1 description"},{"id":2,"depart_name":"office2","depart_type":1,"depart_desc":" office2 description"}]';
+  function load_list(data){
+    var obj = eval('(' + data + ')');
+    console.log(data);
+    console.log(obj);
+    for (i = 0;i < obj.length;i ++){
+      var depart = obj[i];
+      var tr = $('<tr class="active"></tr>');
+      var th = $('<th scope="row">'+(i+1)+'</th>');
+      var td_name = $('<td>'+depart.depart_name+'</td>');
+      var td_type = $('<td>'+type_list[depart.depart_type]+'</td>');
+      var td_desc = $('<td>'+depart.depart_desc+'</td>');
+      var td_button = $('<td></td>');
+      var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" val="'+depart.id+'">编辑</button>');
+      var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" val="'+depart.id+'">删除</button>');
+      tr.append(th);
+      tr.append(td_name);
+      tr.append(td_type);
+      tr.append(td_desc);
+      td_button.append(btn_edit);
+      td_button.append(btn_delete);
+      tr.append(td_button);
+      $("#depart_table").append(tr);
+    }
+  }
+  //window.onload = load_list(test_data);
   $(document).ready(function(){
-    
+    load_list(test_data);
   });
 </script>
 </head>
@@ -233,8 +258,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           <th>操作</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="active">
+      <tbody id="depart_table">
+        <!-- <tr class="active">
           <th scope="row">1</th>
           <td>Column content</td>
           <td>Column content</td>
@@ -324,7 +349,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
           <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
           </td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
     <div>
