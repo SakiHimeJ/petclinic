@@ -36,6 +36,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       //form的button真正触发事件
       username = $("#login_form").find("[name='username']").val();
       password = $("#login_form").find("[name='password']").val();
+      is_manager = $("#login_form").find("input[name='is_manager']:checked").val() == "true";
+      //for test
+      if(username == "admin" || password == "admin"){
+        alert("登陆成功");
+        if(is_manager == false)
+          location.href = "guide.html";
+        else
+          location.href = "usermanagement.html";
+        return;
+      }
+      else{
+        alert("用户名或密码错误");
+        return;
+      }
       if(username == "" || password == ""){
         alert("用户名或密码不能为空");
         return;
@@ -43,14 +57,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       $.ajax({
         type: "POST",
         url: base_url + "/login",
-        data: {username:username, password:password},
+        data: {username:username, password:password,is_manager:is_manager},
         dataType: "json",
         success: function(data){
                     switch(data.status){
                       case 200:
                         token = data.token;
                         alert("登陆成功");
-                        location.href = "index.html?&token="+token;
+                        if(is_manager == false)
+                          location.href = "guide.html?&token="+token;
+                        else
+                          location.href = "usermanagement.html?&token="+token;
                         return;
                       case 401:
                         alert(data.message);
@@ -82,8 +99,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<input type="password" name="password" placeholder="请输入密码" value="">
 		<div class="form-group" style>
       <div class="col-sm-12">
-        <div class="radio-inline"><label><input name="user_type" type="radio" checked="checked"> 实习生 </label></div>
-        <div class="radio-inline"><label><input name="user_type" type="radio"> 管理员 </label></div>
+        <div class="radio-inline"><label><input name="is_manager" type="radio" value="false" checked="checked"> 实习生 </label></div>
+        <div class="radio-inline"><label><input name="is_manager" type="radio" value="true"> 管理员 </label></div>
       </div>
     </div>
     <div class="submit"><input type="submit" id="login_button" value="登陆"></div>
