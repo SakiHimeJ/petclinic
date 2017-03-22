@@ -25,6 +25,47 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+  var base_url = 'http://121.42.33.171:8765';
+  $(document).ready(function(){
+    $("#tablet_form").submit(function(){
+      //禁用form默认提交，使用ajax提交
+      return false;
+    });
+    $("#tablet_cancel").click(function()
+    {
+      $("#tablet_name").val("");
+      $("#tablet_desc").val("");
+    });
+    $("#tablet_submit").click(function(){
+      //form的button真正触发事件
+      item_name = $("#tablet_form").find("[id='tablet_name']").val();
+      item_desc = $("#tablet_form").find("[id='tablet_desc']").val();
+      item_type_id = 3;
+      if(item_name == "" || item_desc == "" ){
+        alert("输入必填项");
+        return;
+      }
+      if(confirm("确定添加吗？"))
+      {
+      $.ajax({
+        type: "POST",
+        url: base_url + "/depart/2/item",
+        data: {item_name:item_name, item_desc:item_desc,item_type_id:item_type_id},
+        dataType: "json",
+
+        success: function(data){
+
+                    alert("添加成功");
+                 },
+        error: function(data){
+                    alert("服务器出现未知错误");
+                 }
+      });
+      }
+    });
+  });
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -186,59 +227,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
        <div class="xs">
-     <h3>档案管理>>新增药品</h3>
+     <h3>药品管理>>新增药品</h3>
      <div>
-       <form class="form-horizontal">
-                <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">药品ID:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="tabletid" placeholder="Default Input">
-                  </div>  
-                </div>
+       <form class="form-horizontal" id="tablet_form">
                 <div class="form-group">
                   <label for="disabledinput" class="col-sm-2 control-label">药品名称:</label>
                   <div class="col-sm-4">
-                    <input  type="text" class="form-control1" id="tabletname" placeholder="Default Input">
+                    <input  type="text" class="form-control1" id="tablet_name" placeholder="Default Input">
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="radio" class="col-sm-2 control-label">有效性:</label>
-                  <div class="col-sm-8">
-                    <div class="radio-inline"><label><input type="radio" name="tabvalid">有效</label></div>
-                    <div class="radio-inline"><label><input type="radio" name="tabvalid">无效</label></div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">药品类别:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="tablettype" placeholder="Default Input">
-                  </div>  
-                </div>
                  <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">功能介绍：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
+                  <label for="txtarea1" class="col-sm-2 control-label">药品说明</label>
+                  <div class="col-sm-8"><textarea name="txtarea1" id="tablet_desc" cols="50" rows="4" class="form-control11"></textarea></div>
                 </div>
-                 <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">药品用量：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                 <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">成分：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">建议价格:</label>
-                  <div class="col-sm-3">
-                    <input disabled="" type="text" class="form-control1" id="focusedinput" placeholder="Default Input">
-                  </div>
-                  <label for="txtarea1" class="col-sm-2 control-label">（单位：元）</label>
-                </div>
-          </form>
+         
                 <hr></hr> 
-          <div class="row"><div class="col-sm-2 col-sm-offset-5">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
+          <div class="row"><div class="col-sm-3 col-sm-offset-3">
+                      <button class="btn-success btn" id="tablet_submit">Submit</button>
+                      <button class="btn-default btn" id="tablet_cancel">Cancel</button>
           </div></div>
+         </form>
      </div>
     </table>
    </div>

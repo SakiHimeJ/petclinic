@@ -30,7 +30,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   $(document).ready(function(){
     $.ajax({
       type:'GET',
-      url:base_url+'/depart',
+      url:base_url+'/item_type',
       data:{},
       async:false,
       dataType:'json',
@@ -38,34 +38,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         console.log(data);
         var obj = data;
         for (i = 0;i < obj.length;i ++){
-          var depart = obj[i];
+          var type = obj[i];
           var tr = $('<tr class="active"></tr>');
-          var th = $('<th scope="row">'+depart.depart_id+'</th>');
-          var td_name = $('<td>'+depart.depart_name+'</td>');
-          var td_type = $('<td>'+depart.depart_type+'</td>');
+          var th = $('<th scope="row">'+type.item_type_id+'</th>');
+          var td_name = $('<td>'+type.item_type_name+'</td>');
           var td_button = $('<td></td>');
-          var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+depart.depart_id+'">编辑</button>');
-          var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+depart.depart_id+'">删除</button>');
+          var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+type.item_type_id+'">编辑</button>');
+          var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+type.item_type_id+'">删除</button>');
           tr.append(th);
           tr.append(td_name);
-          tr.append(td_type);
           td_button.append(btn_edit);
           td_button.append(btn_delete);
           tr.append(td_button);
-          $("#office_table").append(tr);
+          $("#type_table").append(tr);
         }
-        $(".edit_btn").click(function(){
-          depart_id = $(this).val();
-          location.href = 'edit_office.html?depart_id=' + depart_id ;
-        });
+        // $(".edit_btn").click(function(){
+        //   depart_id = $(this).val();
+        //   location.href = 'edit_office.html?depart_id=' + depart_id ;
+        // });
         $(".delete_btn").click(function(){
           if(confirm("确定删除吗？"))
           {                       
-             depart_id = $ (this).val();             
+             item_type_id = $ (this).val();             
              $.ajax({
                 type:'DELETE',
-                url:base_url+'/depart/'+depart_id,
-                data:{depart_id:depart_id},
+                url:base_url+'/item_type/'+item_type_id,
+                data:{item_type_id:item_type_id},
                 dataType:'json',
                 async:false,
                 success:function(data){
@@ -234,6 +232,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <a href="office_manage.html">科室管理</a>
                     </li>
+                    <li>
+                        <a href="itemtype_manage.html">物品类别管理</a>
+                    </li>
+
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -246,30 +248,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
 	   <div class="xs">
-  	 <h3>科室管理</h3>
+  	 <h3>物品类别管理</h3>
   	<div class="bs-example4" data-example-id="contextual-table">
       <div class="row">
-        <div class="col-md-2 grid_box1" style="height: 30px;padding-right: 0px;width: 80px;">
-          <h4 id="caseid">科室ID:</h4>
+        <div class="col-md-2 grid_box1" style="height: 30px;width: 95px;padding-right: 0px;">
+          <h4 id="casename">类别ID:</h4>
         </div>
         <div class="col-md-2 grid_box1" style="height: 30x;padding-left: 0px;width: 115px;">
           <input type="text" class="form-control1" placeholder="输入病例ID" style="height: 25px;">
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;width: 95px;padding-right: 0px;">
-          <h4 id="casename">科室名称:</h4>
+          <h4 id="casename">类别名称:</h4>
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
           <input type="text" class="form-control1" placeholder="输入病例名称" style="height: 25px;">
         </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;width: 95px;padding-right: 0px;">
-          <h4 id="casetyoe">科室类别:</h4>
-        </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
-          <input type="text" class="form-control1" placeholder="输入科室类别" style="height: 25px;">
-        </div>
      <div class="row">
      <div class="col-sm-4 col-sm-offset-4">
-        <a href="new_office.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
+        <a href="new_itemtype.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
       </dic>
@@ -278,16 +274,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <table class="table">
       <thead>
         <tr>
-          <th>科室ID</th>
-          <th>科室名称</th>
-          <th>科室类别</th>
+          <th>物品类别ID</th>
+          <th>物品类别名称</th>
           <th>操作</th>
         </tr>
       </thead>
-      <tbody id="office_table">
-        </tbody>
+      <tbody id="type_table">
+        
+      </tbody>
     </table>
-    <div>
+    <!-- <div>
      <ul class="pagination pagination-sm">
      <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
      <li class="active"><a href="#">1</a></li>
@@ -297,7 +293,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
      <li><a href="#">5</a></li>
      <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
      </ul>
-    </div>
+    </div> -->
    </div>
       </tbody>
     </table>

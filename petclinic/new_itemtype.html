@@ -28,37 +28,41 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script type="text/javascript">
   var base_url = 'http://121.42.33.171:8765';
   $(document).ready(function(){
-    $("#depart_form").submit(function(){
+    $("#type_form").submit(function(){
       //禁用form默认提交，使用ajax提交
       return false;
     });
-    $("#depart_cancel").click(function()
+    $("#type_cancel").click(function()
     {
-      $("#depart_name").val("");
-      $("#depart_type").val("");
-      $("#depart_desc").val("");
+      $("#itemtype_name").val("");
+      $("#itemtype_desc").val("");
     });
-    $("#depart_submit").click(function(){
+    $("#type_submit").click(function(){
       //form的button真正触发事件
-      depart_name = $("#depart_form").find("[id='depart_name']").val();
-      depart_type = $("#depart_form").find("[id='depart_type']").val();
-      depart_desc = $("#depart_form").find("[id='depart_desc']").val();
-      if(depart_name == "" || depart_type == "" || depart_desc=="" ){
+      item_type_name = $("#type_form").find("[id='itemtype_name']").val();
+      item_type_desc = $("#type_form").find("[id='itemtype_desc']").val();
+    
+      if(item_type_name == "" || item_type_desc == "" ){
         alert("输入必填项");
         return;
       }
+      if(confirm("确定添加吗？"))
+      {
       $.ajax({
         type: "POST",
-        url: base_url + '/depart',
-        data: {depart_name:depart_name,depart_type:depart_type,depart_desc:depart_desc},
+        url: base_url + "/item_type",
+        data: {item_type_name:item_type_name,item_type_desc:item_type_desc},
         dataType: "json",
+
         success: function(data){
-                   alert("添加成功");
+
+                    alert("添加成功");
                  },
         error: function(data){
                     alert("服务器出现未知错误");
                  }
       });
+      }
     });
   });
 </script>
@@ -165,7 +169,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       <form class="navbar-form navbar-right">
               <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
             </form>
-            <div class="navbar-default sidebar" role="navigation">
+           <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
             <li>
@@ -209,6 +213,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <a href="office_manage.html">科室管理</a>
                     </li>
+                    <li>
+                        <a href="itemtype_manage.html">物品类别管理</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -216,38 +223,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
     <!-- /.sidebar-collapse -->
 </div>
+                <!-- /.sidebar-collapse -->
+            </div>
             <!-- /.navbar-static-side -->
         </nav>
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
        <div class="xs">
-     <h3>科室管理>>新增科室</h3>
+     <h3>类别管理>>新增类别</h3>
      <div>
-       <form class="form-horizontal" id="depart_form">
+       <form class="form-horizontal" id="type_form">
                 <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">科室名称:</label>
+                  <label for="disabledinput" class="col-sm-2 control-label">类别名称:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="depart_name" placeholder="Default Input">
+                    <input  type="text" class="form-control1" id="itemtype_name" placeholder="Default Input">
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">科室类别:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="depart_type" placeholder="Default Input">
-                </div>  
+                 <div class="form-group">
+                  <label for="txtarea1" class="col-sm-2 control-label">类别说明</label>
+                  <div class="col-sm-8"><textarea name="txtarea1" id="itemtype_desc" cols="50" rows="4" class="form-control11"></textarea></div>
                 </div>
-                <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">科室描述:</label>
-                  <div class="col-sm-8">
-                       <textarea name="txtarea1" cols="50" rows="4" class="form-control11" id="depart_desc"></textarea></div>
-                  </div>
-                <div class="row"><div class="col-sm-3 col-sm-offset-3">
-                      <button class="btn-success btn" id="depart_submit">Submit</button>
-                      <button class="btn-default btn" id="depart_cancel">Cancel</button>
-          </div></div>
-          </form>
+         
                 <hr></hr> 
-        
+          <div class="row"><div class="col-sm-3 col-sm-offset-3">
+                      <button class="btn-success btn" id="type_submit">Submit</button>
+                      <button class="btn-default btn" id="type_cancel">Cancel</button>
+          </div></div>
+         </form>
      </div>
     </table>
    </div>

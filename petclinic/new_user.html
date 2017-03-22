@@ -26,7 +26,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
-  base_url = "http://api.petclinic.com";
+  var base_url = 'http://121.42.33.171:8765';
   $(document).ready(function(){
     $("#user_form").submit(function(){
       //禁用form默认提交，使用ajax提交
@@ -45,31 +45,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         alert("输入必填项");
         return;
       }
+      if(confirm("确定添加吗？"))
+      {
       $.ajax({
         type: "POST",
         url: base_url + "/user",
         data: {username:username, password:password},
         dataType: "json",
+
         success: function(data){
-                    switch(data.status){
-                      case 200:
-                        alert("添加成功");
-                        return;
-                      case 401:
-                        alert(data.message);
-                        return;
-                      case 0:
-                        alert(data.message);
-                        return;
-                      default:
-                        alert("网络异常");
-                        return;
-                    }
+
+                    alert("添加成功");
                  },
         error: function(data){
                     alert("服务器出现未知错误");
                  }
       });
+      }
     });
   });
 </script>
@@ -232,7 +224,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
        <div class="xs">
-     <h3>档案管理>>新增用户</h3>
+     <h3>用户管理>>新增用户</h3>
      <div>
        <form class="form-horizontal" id="user_form">
                 <div class="form-group">
@@ -247,7 +239,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <input type="text" class="form-control1" id="password" placeholder="Default Input">
                 </div>  
                 </div>
-                <div class="row"><div class="col-sm-2 col-sm-offset-5">
+                <div class="row"><div class="col-sm-3 col-sm-offset-3">
                       <button class="btn-success btn" id="user_submit">Submit</button>
                       <button class="btn-default btn" id="user_cancel">Cancel</button>
           </div></div>
