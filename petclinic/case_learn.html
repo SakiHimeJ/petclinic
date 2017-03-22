@@ -1,0 +1,755 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>虚拟宠物医院</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<!-- jQuery -->
+<script src="js/jquery.min.js"></script>
+
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+ <!-- Bootstrap Core CSS -->
+<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<link href="css/video-js.min.css" rel="stylesheet">
+<link href="css/font-awesome.css" rel="stylesheet"> 
+<link rel="stylesheet" type="text/css" href="css/rollbar_style.css">
+<script src="js/video.min.js"></script>
+  <style>
+    body{background-color: #252525}
+    .m{ margin-left: auto; margin-right: auto; width: 960px;height: 400px;}
+  </style>
+
+
+<!----webfonts--->
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+<!---//webfonts--->  
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+
+<style type="text/css">
+*{ margin:0; padding:0; list-style:none;}
+img{ border:0;}
+
+.ban{ width:500px; height:600px; position:relative; overflow:hidden;margin: auto 0 auto;}
+.ban2{ width:500px; height:500px; position:relative; overflow:hidden;}
+.ban2 ul{ position:absolute; left:0; top:0;}
+.ban2 ul li{ width:500px; height:500px;}
+.prev{ float:left; cursor:pointer;}
+.num{ height:82px;overflow:hidden; width:430px; position:relative;float:left;}
+.min_pic{ padding-top:10px; width:500px;}
+.num ul{ position:absolute; left:0; top:0;}
+.num ul li{ width:80px; height:80px; margin-right:5px; padding:1px;}
+.num ul li.on{ border:1px solid red; padding:0;}
+.prev_btn1{ width:16px; text-align:center; height:18px; margin-top:40px; margin-right:20px; cursor:pointer; float:left;}
+.next_btn1{  width:16px; text-align:center; height:18px; margin-top:40px;cursor:pointer;float:right;}
+.prev1{ position:absolute; top:220px; left:20px; width:28px; height:51px;z-index:9;cursor:pointer;}
+.next1{ position:absolute; top:220px; right:20px; width:28px; height:51px;z-index:9;cursor:pointer;}
+.mhc{ background:#000; width:100%;opacity:0.5;-moz-opacity:0.5;filter:alpha(Opacity=50); position:absolute; left:0; top:0; display:none;}
+.pop_up{ width:500px; height:500px; padding:0px; background:#fff; position:fixed; -position:absolute; left:50%; top:50%; margin-left:-255px; margin-top:-255px; display:none; z-index:99;}
+.pop_up_xx{ width:40px; height:40px; position:absolute; top:-40px; right:0; cursor:pointer;}
+.pop_up2{ width:500px; height:500px; position:relative; overflow:hidden;}
+.pop_up2{ width:500px; height:500px; position:relative; overflow:hidden; float:left;}
+.pop_up2 ul{ position:absolute; left:0; top:0;}
+.pop_up2 ul li{ width:500px; height:500px; float:left;}
+</style>
+<style type="text/css">
+  .activity_box {
+    background: #fff;
+    min-height: 800px;
+    margin-bottom: 200px;
+  }
+  .scrollbar {
+    height: 800px;
+    background: #fff;
+    overflow-y: scroll;
+    padding: 2em 1em;
+  }
+  .activity-row {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    min-height: 800px;
+  }
+</style>
+</head>
+<body>
+<div id="wrapper">
+     <!-- Navigation -->
+        <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">宠物医院后台管理系统</a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+	        		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-comments-o"></i><span class="badge">4</span></a>
+	        		<ul class="dropdown-menu">
+						<li class="dropdown-menu-header">
+							<strong>Messages</strong>
+							<div class="progress thin">
+							  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+							    <span class="sr-only">40% Complete (success)</span>
+							  </div>
+							</div>
+						</li>
+						<li class="avatar">
+							<a href="#">
+								<img src="images/1.png" alt=""/>
+								<div>New message</div>
+								<small>1 minute ago</small>
+								<span class="label label-info">NEW</span>
+							</a>
+						</li>
+						<li class="avatar">
+							<a href="#">
+								<img src="images/2.png" alt=""/>
+								<div>New message</div>
+								<small>1 minute ago</small>
+								<span class="label label-info">NEW</span>
+							</a>
+						</li>
+						<li class="avatar">
+							<a href="#">
+								<img src="images/3.png" alt=""/>
+								<div>New message</div>
+								<small>1 minute ago</small>
+							</a>
+						</li>
+						<li class="avatar">
+							<a href="#">
+								<img src="images/4.png" alt=""/>
+								<div>New message</div>
+								<small>1 minute ago</small>
+							</a>
+						</li>
+						<li class="avatar">
+							<a href="#">
+								<img src="images/5.png" alt=""/>
+								<div>New message</div>
+								<small>1 minute ago</small>
+							</a>
+						</li>
+						<li class="avatar">
+							<a href="#">
+								<img src="images/pic1.png" alt=""/>
+								<div>New message</div>
+								<small>1 minute ago</small>
+							</a>
+						</li>
+						<li class="dropdown-menu-footer text-center">
+							<a href="#">View all messages</a>
+						</li>	
+	        		</ul>
+	      		</li>
+			    <li class="dropdown">
+	        		<a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="images/1.png" alt=""/><span class="badge">9</span></a>
+	        		<ul class="dropdown-menu">
+						<li class="dropdown-menu-header text-center">
+							<strong>Account</strong>
+						</li>
+						<li class="m_2"><a href="#"><i class="fa fa-bell-o"></i> Updates <span class="label label-info">42</span></a></li>
+						<li class="m_2"><a href="#"><i class="fa fa-envelope-o"></i> Messages <span class="label label-success">42</span></a></li>
+						<li class="m_2"><a href="#"><i class="fa fa-tasks"></i> Tasks <span class="label label-danger">42</span></a></li>
+						<li><a href="#"><i class="fa fa-comments"></i> Comments <span class="label label-warning">42</span></a></li>
+						<li class="dropdown-menu-header text-center">
+							<strong>Settings</strong>
+						</li>
+						<li class="m_2"><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+						<li class="m_2"><a href="#"><i class="fa fa-wrench"></i> Settings</a></li>
+						<li class="m_2"><a href="#"><i class="fa fa-usd"></i> Payments <span class="label label-default">42</span></a></li>
+						<li class="m_2"><a href="#"><i class="fa fa-file"></i> Projects <span class="label label-primary">42</span></a></li>
+						<li class="divider"></li>
+						<li class="m_2"><a href="#"><i class="fa fa-shield"></i> Lock Profile</a></li>
+						<li class="m_2"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>	
+	        		</ul>
+	      		</li>
+			</ul>
+			<form class="navbar-form navbar-right">
+              <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
+            </form>
+           <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+            <li>
+                <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse in">
+                    <li>
+                        <a href="guide.html">医院3D导览</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse in">
+                            <li>
+                                <a href="#">角色扮演</a>
+                            </li>
+                            <li>
+                                <a href="#">病例学习</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="case_manage.html">病例管理</a>
+                    </li>
+                    <li>
+                        <a href="tablet_manage.html">药品管理</a>
+                    </li>
+                    <li>
+                        <a href="fee_manage.html">收费管理</a>
+                    </li>
+                    <li>
+                        <a href="doc_manage.html">档案管理</a>
+                    </li>
+                    <li>
+                        <a href="office_manage.html">科室管理</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>
+            <!-- /.navbar-static-side -->
+        </nav>
+    <div id="page-wrapper">
+        <div class="graphs">
+        <h3>病例学习</h3>
+          <div class="col_1">
+            <div class="col-md-12 span_8">
+               <div class="activity_box">
+                <div class="scrollbar" id="style-2">
+                       <div class="activity-row">                       
+                           <div class="col-xs-8 activity-desc">
+                            <h3 style="margin-bottom:20px">接诊</h3>
+                              <p>1、迎接：  看到顾客迈上台阶准备进门时，要迅速走出导医台，主动开门迎接，面带微笑、行鞠躬礼，以手势示意顾客走到吧台前，要体现出热情和真诚。 2、询问：  （1）、初诊：为有效的分诊而询问，如“您好！您是第一次来吗？请问您的牙齿怎么了？麻烦您先建一个病历或挂个号好吗？”或“您好！您预约了吗？或您的预约卡带了吗？”询问时要站立、面带微笑，目光注视着对方。并嘱咐顾客：“您先稍坐一会，我马上为您安排！” （2）、复诊：复诊患者先取病历，同时要有几句简单的交流，如您的牙齿现在感觉怎样？因为是复诊患者，根据其情绪和状态，可适当的寒暄或赞美几句，如今天不是太忙啊？吃过XX饭了吗？您今天的气色很好！或您穿的衣服很好看，请问在哪买的等等。</p>
+                              <p style="margin-top:20px">
+                                <button type="button" class="btn btn_5 btn-lg btn-primary" data-toggle="modal" data-target="#modal_video_1">查看演示视频</button>
+                              </p>
+                           </div>
+                           <div class="col-xs-4">
+                             <div class="ban" id="demo1">
+                                <div class="ban2" id="ban_pic1">
+                                  <div class="prev1" id="prev1"><img src="images/index_tab_l.png" width="28" height="51" alt=""></div>
+                                  <div class="next1" id="next1"><img src="images/index_tab_r.png" width="28" height="51" alt=""></div>
+                                  <ul style="width: 5000px; height: 5000px; left: -4000px;">
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                  </ul>
+                                </div>
+                                <div class="min_pic">
+                                  <div class="prev_btn1" id="prev_btn1"><img src="images/feel3.png" width="9" height="18" alt=""></div>
+                                  <div class="num clearfix" id="ban_num1">
+                                    <ul style="width: 870px; height: 820px; left: -435px;">
+                                      <li class="" style="float: left;"><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class="on"><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                    </ul>
+                                  </div>
+                                  <div class="next_btn1" id="next_btn1"><img src="images/feel4.png" width="9" height="18" alt=""></div>
+                                </div>
+                              </div>
+                           </div>
+                           <div class="clearfix"> </div>
+                        </div>
+                        <div class="activity-row">                       
+                           <div class="col-xs-8 activity-desc">
+                            <h3>病理检查</h3>
+                              <p>用以检查机体器官、组织或细胞中的病理改变的病理形态学方法。为探讨器官、组织或细胞所发生的疾病过程，可采用某种病理形态学检查的方法，检查他们所发生的病变 ，探讨病变产生的原因、发病机理、病变的发生发展过程，最后做出病理诊断。病理形态学的检查方法，首先观察大体标本的病理改变，然后切取一定大小的病变组织，用病理组织学方法制成病理切片，用显微镜进一步检查病变。</p>
+                              <p style="margin-top:20px">
+                                <button type="button" class="btn btn_5 btn-lg btn-primary" data-toggle="modal" data-target="#modal_video_2">查看演示视频</button>
+                              </p>
+                           </div>
+                           <div class="col-xs-4">
+                             <div class="ban" id="demo2">
+                                <div class="ban2" id="ban_pic2">
+                                  <div class="prev1" id="prev2"><img src="images/index_tab_l.png" width="28" height="51" alt=""></div>
+                                  <div class="next1" id="next2"><img src="images/index_tab_r.png" width="28" height="51" alt=""></div>
+                                  <ul style="width: 5000px; height: 5000px; left: -4000px;">
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                  </ul>
+                                </div>
+                                <div class="min_pic">
+                                  <div class="prev_btn1" id="prev_btn2"><img src="images/feel3.png" width="9" height="18" alt=""></div>
+                                  <div class="num clearfix" id="ban_num2">
+                                    <ul style="width: 870px; height: 820px; left: -435px;">
+                                      <li class="" style="float: left;"><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class="on"><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                    </ul>
+                                  </div>
+                                  <div class="next_btn1" id="next_btn2"><img src="images/feel4.png" width="9" height="18" alt=""></div>
+                                </div>
+                              </div>
+                           </div>
+                           <div class="clearfix"> </div>
+                        </div>
+                        <div class="activity-row">                       
+                           <div class="col-xs-8 activity-desc">
+                            <h3>诊断结果</h3>
+                              <p>依据《危险化学品从业单位安全生产标准化评审标准》、《山西省危险化学品从业单位安全生产标准化补充要求及评审标准》、《山西省危险化学品从业单位安全生产标准化实施细则》等严格对标。</p>
+                              <p style="margin-top:20px">
+                                <button type="button" class="btn btn_5 btn-lg btn-primary" data-toggle="modal" data-target="#modal_video_3">查看演示视频</button>
+                              </p>
+                           </div>
+                           <div class="col-xs-4">
+                             <div class="ban" id="demo3">
+                                <div class="ban2" id="ban_pic3">
+                                  <div class="prev1" id="prev3"><img src="images/index_tab_l.png" width="28" height="51" alt=""></div>
+                                  <div class="next1" id="next3"><img src="images/index_tab_r.png" width="28" height="51" alt=""></div>
+                                  <ul style="width: 5000px; height: 5000px; left: -4000px;">
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                  </ul>
+                                </div>
+                                <div class="min_pic">
+                                  <div class="prev_btn1" id="prev_btn3"><img src="images/feel3.png" width="9" height="18" alt=""></div>
+                                  <div class="num clearfix" id="ban_num3">
+                                    <ul style="width: 870px; height: 820px; left: -435px;">
+                                      <li class="" style="float: left;"><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class="on"><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                    </ul>
+                                  </div>
+                                  <div class="next_btn1" id="next_btn3"><img src="images/feel4.png" width="9" height="18" alt=""></div>
+                                </div>
+                              </div>
+                           </div>
+                           <div class="clearfix"> </div>
+                        </div>
+                        <div class="activity-row">                       
+                           <div class="col-xs-8 activity-desc">
+                            <h3>治疗方案</h3>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+                              <p style="margin-top:20px">
+                                <button type="button" class="btn btn_5 btn-lg btn-primary" data-toggle="modal" data-target="#modal_video_4">查看演示视频</button>
+                              </p>
+                           </div>
+                           <div class="col-xs-4">
+                             <div class="ban" id="demo4">
+                                <div class="ban2" id="ban_pic4">
+                                  <div class="prev1" id="prev4"><img src="images/index_tab_l.png" width="28" height="51" alt=""></div>
+                                  <div class="next1" id="next4"><img src="images/index_tab_r.png" width="28" height="51" alt=""></div>
+                                  <ul style="width: 5000px; height: 5000px; left: -4000px;">
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b1.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b2.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b3.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b4.jpg" width="500" height="500" alt=""></a></li>
+                                    <li style="float: left;"><a href="javascript:;"><img src="images/b5.jpg" width="500" height="500" alt=""></a></li>
+                                  </ul>
+                                </div>
+                                <div class="min_pic">
+                                  <div class="prev_btn1" id="prev_btn4"><img src="images/feel3.png" width="9" height="18" alt=""></div>
+                                  <div class="num clearfix" id="ban_num4">
+                                    <ul style="width: 870px; height: 820px; left: -435px;">
+                                      <li class="" style="float: left;"><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s1.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s2.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s3.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class="on"><a href="javascript:;"><img src="images/s4.jpg" width="80" height="80" alt=""></a></li>
+                                      <li style="float: left;" class=""><a href="javascript:;"><img src="images/s5.jpg" width="80" height="80" alt=""></a></li>
+                                    </ul>
+                                  </div>
+                                  <div class="next_btn1" id="next_btn4"><img src="images/feel4.png" width="9" height="18" alt=""></div>
+                                </div>
+                              </div>
+                           </div>
+                           <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        </div>
+    </div>
+  <div class="copy_layout">
+      <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+  </div>
+   </div>
+      </div>
+      <!-- /#page-wrapper -->
+   </div>
+    <!-- /#wrapper -->
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="modal_video_1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:990px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              演示视频
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div class="m">
+              <video
+                  id="my-player-1"
+                  class="video-js"
+                  controls
+                  preload="auto"
+                  poster="video/poster/oceans.png"
+                  data-setup='{}'>
+                <source src="video/oceans.mp4" type="video/mp4"></source>
+                <!-- <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
+                <source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source> -->
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                  </a>
+                </p>
+              </video>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+              我学会了
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="modal_video_2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:990px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              演示视频
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div class="m">
+              <video
+                  id="my-player-2"
+                  class="video-js"
+                  controls
+                  preload="auto"
+                  poster="video/poster/oceans.png"
+                  data-setup='{}'>
+                <source src="video/oceans.mp4" type="video/mp4"></source>
+                <!-- <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
+                <source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source> -->
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                  </a>
+                </p>
+              </video>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+              我学会了
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="modal_video_3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:990px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              演示视频
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div class="m">
+              <video
+                  id="my-player-3"
+                  class="video-js"
+                  controls
+                  preload="auto"
+                  poster="video/poster/oceans.png"
+                  data-setup='{}'>
+                <source src="video/oceans.mp4" type="video/mp4"></source>
+                <!-- <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
+                <source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source> -->
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                  </a>
+                </p>
+              </video>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+              我学会了
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="modal_video_4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:990px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              演示视频
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div class="m">
+              <video
+                  id="my-player-4"
+                  class="video-js"
+                  controls
+                  preload="auto"
+                  poster="video/poster/oceans.png"
+                  data-setup='{}'>
+                <source src="video/oceans.mp4" type="video/mp4"></source>
+                <!-- <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
+                <source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source> -->
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                  </a>
+                </p>
+              </video>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+              我学会了
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+<!-- Nav CSS -->
+<link href="css/custom.css" rel="stylesheet">
+<script src="js/pic_tab.js"></script>
+<script type="text/javascript">
+  //四个板块：接诊，病理检查，诊断结果，治疗方案
+
+  //图片切换插件
+  jq('#demo1').banqh({
+    box:"#demo1",//总框架
+    pic:"#ban_pic1",//大图框架
+    pnum:"#ban_num1",//小图框架
+    prev_btn:"#prev_btn1",//小图左箭头
+    next_btn:"#next_btn1",//小图右箭头
+    prev:"#prev1",//大图左箭头
+    next:"#next1",//大图右箭头
+    autoplay:true,//是否自动播放
+    interTime:5000,//图片自动切换间隔
+    delayTime:400,//切换一张图片时间
+    pop_delayTime:400,//弹出框切换一张图片时间
+    order:0,//当前显示的图片（从0开始）
+    picdire:true,//大图滚动方向（true为水平方向滚动）
+    mindire:true,//小图滚动方向（true为水平方向滚动）
+    min_picnum:5,//小图显示数量
+    pop_up:false//大图是否有弹出框
+  });
+
+  jq('#demo2').banqh({
+    box:"#demo2",//总框架
+    pic:"#ban_pic2",//大图框架
+    pnum:"#ban_num2",//小图框架
+    prev_btn:"#prev_btn2",//小图左箭头
+    next_btn:"#next_btn2",//小图右箭头
+    prev:"#prev2",//大图左箭头
+    next:"#next2",//大图右箭头
+    autoplay:true,//是否自动播放
+    interTime:5000,//图片自动切换间隔
+    delayTime:400,//切换一张图片时间
+    pop_delayTime:400,//弹出框切换一张图片时间
+    order:0,//当前显示的图片（从0开始）
+    picdire:true,//大图滚动方向（true为水平方向滚动）
+    mindire:true,//小图滚动方向（true为水平方向滚动）
+    min_picnum:5,//小图显示数量
+    pop_up:false//大图是否有弹出框
+  });
+
+  jq('#demo3').banqh({
+    box:"#demo3",//总框架
+    pic:"#ban_pic3",//大图框架
+    pnum:"#ban_num3",//小图框架
+    prev_btn:"#prev_btn3",//小图左箭头
+    next_btn:"#next_btn3",//小图右箭头
+    prev:"#prev3",//大图左箭头
+    next:"#next3",//大图右箭头
+    autoplay:true,//是否自动播放
+    interTime:5000,//图片自动切换间隔
+    delayTime:400,//切换一张图片时间
+    pop_delayTime:400,//弹出框切换一张图片时间
+    order:0,//当前显示的图片（从0开始）
+    picdire:true,//大图滚动方向（true为水平方向滚动）
+    mindire:true,//小图滚动方向（true为水平方向滚动）
+    min_picnum:5,//小图显示数量
+    pop_up:false//大图是否有弹出框
+  });
+
+  jq('#demo4').banqh({
+    box:"#demo4",//总框架
+    pic:"#ban_pic4",//大图框架
+    pnum:"#ban_num4",//小图框架
+    prev_btn:"#prev_btn4",//小图左箭头
+    next_btn:"#next_btn4",//小图右箭头
+    prev:"#prev4",//大图左箭头
+    next:"#next4",//大图右箭头
+    autoplay:true,//是否自动播放
+    interTime:5000,//图片自动切换间隔
+    delayTime:400,//切换一张图片时间
+    pop_delayTime:400,//弹出框切换一张图片时间
+    order:0,//当前显示的图片（从0开始）
+    picdire:true,//大图滚动方向（true为水平方向滚动）
+    mindire:true,//小图滚动方向（true为水平方向滚动）
+    min_picnum:5,//小图显示数量
+    pop_up:false//大图是否有弹出框
+  });
+  
+
+  //视频播放插件
+  var myPlayer1 = videojs('my-player-1');
+  videojs("my-player-1").ready(function(){
+      var myPlayer = this;
+      //myPlayer.play();
+  });
+  var myPlayer2 = videojs('my-player-2');
+  videojs("my-player-2").ready(function(){
+      var myPlayer = this;
+      //myPlayer.play();
+  });
+  var myPlayer3 = videojs('my-player-3');
+  videojs("my-player-1").ready(function(){
+      var myPlayer = this;
+      //myPlayer.play();
+  });
+  var myPlayer4 = videojs('my-player-4');
+  videojs("my-player-4").ready(function(){
+      var myPlayer = this;
+      //myPlayer.play();
+  });
+
+  jQuery(function($){
+    //pic_tab.js里限制了jquery符号的意义，这里可以正常使用$ 
+    $('#modal_video_1').on('hide.bs.modal', function () {
+      myPlayer1.pause();
+    });
+    $('#modal_video_2').on('hide.bs.modal', function () {
+      myPlayer2.pause();
+    });
+    $('#modal_video_3').on('hide.bs.modal', function () {
+      myPlayer3.pause();
+    });
+    $('#modal_video_4').on('hide.bs.modal', function () {
+      myPlayer4.pause();
+    });
+  })
+</script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="js/metisMenu.min.js"></script>
+<!-- <script src="js/custom.js"></script> -->
+</body>
+</html>
