@@ -27,6 +27,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
   var base_url = 'http://121.42.33.171:8765';
+  var is_manager,token;
+  function getCookie(name)
+  {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+    else
+    return null;
+  }
+    //登陆拦截
+    function intercepter(){
+      token = getCookie('token');
+      is_manager = 'true' == getCookie('is_manager');
+      console.log(is_manager);
+      if(token == null /*|| is_manager == false*/){
+        location.href = "login.html";
+        alert('请重新登陆');
+      }
+      console.log(token);
+      return token;
+    }
+    var token = intercepter();
   $(document).ready(function(){
     $("#tablet_form").submit(function(){
       //禁用form默认提交，使用ajax提交
@@ -53,10 +75,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         url: base_url + "/depart/2/item",
         data: {item_name:item_name, item_desc:item_desc,item_type_id:item_type_id},
         dataType: "json",
-
+         beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
         success: function(data){
 
                     alert("添加成功");
+                    window.location.reload();
                  },
         error: function(data){
                     alert("服务器出现未知错误");
@@ -197,6 +223,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="manager_manage.html">管理员信息管理</a>
                     </li>
                     <li>
                         <a href="case_manage.html">病例管理</a>

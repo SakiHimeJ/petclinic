@@ -24,24 +24,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
   var base_url = 'http://121.42.33.171:8765';
-     function intercepter(){
-    var token = getCookie('token');
-      if(token == null)
-      location.href = "login.html";
-    console.log(token);
-    return token;
+  var is_manager,token;
+  function getCookie(name)
+  {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+    else
+    return null;
+  }
+    //登陆拦截
+    function intercepter(){
+      token = getCookie('token');
+      is_manager = 'true' == getCookie('is_manager');
+      console.log(is_manager);
+      if(token == null /*|| is_manager == false*/){
+        location.href = "login.html";
+        alert('请重新登陆');
+      }
+      console.log(token);
+      return token;
     }
-    function getCookie(name)
-    {
-      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-      if(arr=document.cookie.match(reg))
-      return unescape(arr[2]);
-      else
-      return null;
-    }
-
-  var token = intercepter();
-
+    var token = intercepter();
   $(document).ready(function(){
     var urlinfo = window.location.href; //获取url
     var params = {};
@@ -67,10 +71,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         url:base_url+'/depart/'+params['depart_id'],
         data:{},
         dataType:'json',
-        // beforeSend: function(request) {
-        //     console.log(token);  
-        //     request.setRequestHeader("token", token);  
-        // }, 
+        beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
         success:function(data){
           var depart_id = data.depart_id;
           var depart_name = data.depart_name;
@@ -85,10 +89,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
               url:base_url+'/depart/'+depart_id+'/item',
               data:{},
               dataType:'json',
-              // beforeSend: function(request) {
-              //     console.log(token);  
-              //     request.setRequestHeader("token", token);  
-              // }, 
               success:function(data){
                 console.log(data);
                 var item_list = data;
@@ -140,6 +140,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         dataType: "json",
         success: function(data){
                    alert("添加成功");
+                   window.location.reload();
                  },
         error: function(data){
                     alert("服务器出现未知错误");
@@ -279,6 +280,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="manager_manage.html">管理员信息管理</a>
                     </li>
                     <li>
                         <a href="case_manage.html">病例管理</a>

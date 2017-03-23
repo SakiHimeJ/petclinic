@@ -20,37 +20,45 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="css/font-awesome.css" rel="stylesheet"> 
 <!-- jQuery -->
 <script src="js/jquery.min.js"></script>
-<!----webfonts--->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
-<!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
-<script>
+<script type="text/javascript">
   var base_url = 'http://121.42.33.171:8765';
-  function intercepter(){
-    var token = getCookie('token');
-      if(token == null)
-      location.href = "login.html";
-    console.log(token);
-    return token;
-    }
-    function getCookie(name)
-    {
-      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-      if(arr=document.cookie.match(reg))
-      return unescape(arr[2]);
-      else
-      return null;
+  var is_manager,token;
+  function getCookie(name)
+  {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+    else
+    return null;
+  }
+    //登陆拦截
+    function intercepter(){
+      token = getCookie('token');
+      is_manager = 'true' == getCookie('is_manager');
+      console.log(is_manager);
+      if(token == null /*|| is_manager == false*/){
+        location.href = "login.html";
+        alert('请重新登陆');
+      }
+      console.log(token);
+      return token;
     }
     var token = intercepter();
+  $(document).ready(function(){
     $.ajax({
       type:'GET',
       url:base_url+'/manager',
       data:{},
-      async:false,
       dataType:'json',
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
       success:function(data){
         console.log(data);
+        //处理页面展示
         var obj = data;
         for (i = 0;i < obj.length;i ++){
           var manager = obj[i];
@@ -67,22 +75,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           tr.append(td_button);
           $("#manager_table").append(tr);
         }
+        //添加页面回调
         $(".edit_btn").click(function(){
-          user_id = $(this).val();
-          location.href = 'edit_user.html?manager.id=' + manager_id;
+          manager_id = $(this).val();
+          location.href = 'edit_user.html?manager_id=' + manager_id;
         });
         $(".delete_btn").click(function(){
           if(confirm("确定删除吗？"))
           {                       
-             user_id = $ (this).val();             
+             manager_id = $ (this).val();             
              $.ajax({
                 type:'DELETE',
                 url:base_url+'/manager/'+manager_id,
-                data:{manager_id:manager_id},
+                data:{user_id:user_id},
                 dataType:'json',
+                async:false,
+                beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+                }, 
+
                 success:function(data){
                     alert('成功删除');
-                    $ (this).parents("tr").remove();
+                    window.location.reload();
+                    $(this).parents("tr").remove();
                 },
                 error:function(){
                     alert('服务器发生未知错误');
@@ -98,7 +114,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       }
     });
   });
-
 </script>
 </head>
 <body>
@@ -205,7 +220,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
-            <li>
+            <li id="user_list">
                 <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse in">
                     <li>
@@ -225,11 +240,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
-            <li>
+            <li id="manager_list">
                 <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="manager_manage.html">管理员信息管理</a>
                     </li>
                     <li>
                         <a href="case_manage.html">病例管理</a>
@@ -246,13 +264,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <a href="office_manage.html">科室管理</a>
                     </li>
-                     <li>
+                    <li>
                         <a href="itemtype_manage.html">物品类别管理</a>
                     </li>
-                     <li>
-                        <a href="manager_manage.html">管理员信息管理</a>
-                    </li>
-
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -265,24 +279,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
 	   <div class="xs">
-  	 <h3>用户信息管理</h3>
+  	 <h3>管理员信息管理</h3>
   	<div class="bs-example4" data-example-id="contextual-table">
-    <div class="">
+    <div class="row">
         <div class="col-md-2 grid_box1" style="height: 30px;padding-right: 0px;width: 130px;">
-          <h3 id="h3">用户名字:</h3>
+          <h4 id="h3">用户名字:</h4>
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 115px;">
           <input type="text" class="form-control1" placeholder="输入用户id" style="height: 30px;">
         </div>
-        <a href="new_manager.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增管理员</button></a>
-        <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
-        <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <a href ="new_manager.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
+          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
+          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
+        </div>
         <div class="clearfix"> </div>
     <table class="table">
       <thead>
         <tr>
-          <th>管理员ID</th>
-          <th>管理员名</th>
+          <th>用户ID</th>
+          <th>用户名</th>
           <th>操作</th>
         </tr>
       </thead>

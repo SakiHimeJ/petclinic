@@ -27,23 +27,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
    var base_url = 'http://121.42.33.171:8765';
-  $(document).ready(function(){
-     function intercepter(){
-    var token = getCookie('token');
-      if(token == null)
-      location.href = "login.html";
-    console.log(token);
-    return token;
-    }
-    function getCookie(name)
-    {
-      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-      if(arr=document.cookie.match(reg))
-      return unescape(arr[2]);
-      else
-      return null;
+   var is_manager,token;
+  function getCookie(name)
+  {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+    else
+    return null;
+  }
+    //登陆拦截
+    function intercepter(){
+      token = getCookie('token');
+      is_manager = 'true' == getCookie('is_manager');
+      console.log(is_manager);
+      if(token == null /*|| is_manager == false*/){
+        location.href = "login.html";
+        alert('请重新登陆');
+      }
+      console.log(token);
+      return token;
     }
     var token = intercepter();
+  $(document).ready(function(){
     var urlinfo = window.location.href; //获取url
     console.log(urlinfo);
     var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
@@ -70,6 +76,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       data:{item_id:item_id},
       async: false,
       dataType:'json',
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
       success:function(data){
           $("#item_name").val(data.item_name);
           $("#item_desc").val(data.item_desc);           
@@ -232,6 +242,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="manager_manage.html">管理员信息管理</a>
                     </li>
                     <li>
                         <a href="case_manage.html">病例管理</a>

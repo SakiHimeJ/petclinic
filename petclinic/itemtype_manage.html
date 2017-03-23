@@ -27,29 +27,39 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/bootstrap.min.js"></script>
 <script>
   var base_url = 'http://121.42.33.171:8765';
-  $(document).ready(function(){
-     function intercepter(){
-    var token = getCookie('token');
-      if(token == null)
-      location.href = "login.html";
-    console.log(token);
-    return token;
-    }
-    function getCookie(name)
-    {
-      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-      if(arr=document.cookie.match(reg))
-      return unescape(arr[2]);
-      else
-      return null;
+  var is_manager,token;
+  function getCookie(name)
+  {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+    else
+    return null;
+  }
+    //登陆拦截
+    function intercepter(){
+      token = getCookie('token');
+      is_manager = 'true' == getCookie('is_manager');
+      console.log(is_manager);
+      if(token == null /*|| is_manager == false*/){
+        location.href = "login.html";
+        alert('请重新登陆');
+      }
+      console.log(token);
+      return token;
     }
     var token = intercepter();
+  $(document).ready(function(){
     $.ajax({
       type:'GET',
       url:base_url+'/item_type',
       data:{},
       async:false,
       dataType:'json',
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
       success:function(data){
         console.log(data);
         var obj = data;
@@ -63,7 +73,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+type.item_type_id+'">删除</button>');
           tr.append(th);
           tr.append(td_name);
-          td_button.append(btn_edit);
+         // td_button.append(btn_edit);
           td_button.append(btn_delete);
           tr.append(td_button);
           $("#type_table").append(tr);
@@ -82,6 +92,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 data:{item_type_id:item_type_id},
                 dataType:'json',
                 async:false,
+                beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
+
                 success:function(data){
                     alert('成功删除');
                     $ (this).parents("tr").remove();
@@ -232,6 +247,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="manager_manage.html">管理员信息管理</a>
                     </li>
                     <li>
                         <a href="case_manage.html">病例管理</a>

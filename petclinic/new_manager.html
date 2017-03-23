@@ -68,10 +68,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         url: base_url + "/manager",
         data: {username:username, password:password},
         dataType: "json",
-
+        beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
         success: function(data){
 
                     alert("添加成功");
+                    window.location.reload();
                  },
         error: function(data){
                     alert("服务器出现未知错误");
@@ -212,6 +216,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="user_manage.html">用户信息管理</a>
+                    </li>
+                    <li>
+                        <a href="manager_manage.html">管理员信息管理</a>
                     </li>
                     <li>
                         <a href="case_manage.html">病例管理</a>
