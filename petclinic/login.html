@@ -102,14 +102,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
               delCookie("password");
 
               var token = data;
-              if(data != undefined)
+              if(data != undefined && data != null){
                 setCookie("token",data,0);
-              setCookie("username",username,0);
-              setCookie("password",password,0);
-              if(is_manager == false)
-                location.href = "guide.html";
-              else
-                location.href = "user_manage.html";
+                setCookie("username",username,0);
+                setCookie("password",password,0);
+                setCookie("is_manager",is_manager,0);
+                if(is_manager == false)
+                  location.href = "guide.html";
+                else
+                  location.href = "user_manage.html";
+              }
+              else{
+                alert("服务器出现未知错误");
+              }
            },
         error: function(data){
             alert("服务器出现未知错误");
