@@ -28,6 +28,49 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Graph JavaScript -->
 <script src="js/d3.v3.js"></script>
 <script src="js/rickshaw.js"></script>
+<script type="text/javascript">
+
+    var a=new Array('first', 'secoond', 'thrid');
+    var b=new Array('images/s1.jpg','images/s2.jpg','images/s3.jpg')
+   
+    function NextPages()
+    {
+        var img = document.getElementById("learnImage");
+          var d1=document.getElementById("mainInfo");
+           for (var i = 0;i<b.length-1;i++) {
+               if(img.getAttribute('src')==b[i])
+               {
+                  img.src=b[i+1];
+                  d1.innerHTML=a[i+1];
+                  break;
+                
+               }
+             
+                  
+           }
+
+    return false;
+    }
+
+    function PrePages()
+    {
+          
+            var img = document.getElementById("learnImage");
+             var d1=document.getElementById("mainInfo");
+             for (var i = 1;i<b.length;i++) {
+               if(img.getAttribute('src')==b[i])
+               {
+                img.src=b[i-1];
+                d1.innerHTML=a[i-1];
+               }
+
+              
+           }
+
+    return false;
+    }
+
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -189,20 +232,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div class="col-md-12 col_4">
        <!--第一页-->
     
-       <div class="col-md-12 col_1_of_2 span_1_of_2">
-            
-                <span style="font-size:20px;color:blue;"><strong> &nbsp &nbsp &nbsp静脉注射流程</strong></span>
+ <div class="col-md-12 col_1_of_2 span_1_of_2">
+        <span style="font-size:20px;color:blue;"><strong> &nbsp &nbsp &nbsp静脉注射流程</strong></span>
                 <br>
-<div class="col-md-12 col-sm-offset-2">
-                <button class="btn-success btn">step1</button>
-                <button class="btn-primary btn">step2</button>
-                
-                <button class="btn-primary btn">step3</button>
-                <button class="btn-primary btn">step4</button>
-                <button class="btn-primary btn">step5</button>
+            <div class="col-md-12 col-sm-offset-2">
                
            </div>
-          
+           <div class="clearfix"> </div>
+         </div>
            <div class="clearfix"> </div>
          </div>
 
@@ -212,11 +249,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <br>
         <br>
                     <div class="wid_blog-left">
-                        <img src="images/bg.jpg" class="img-responsive" alt=""> <!--图片url-->
+                        <img id="learnImage" src="images/s1.jpg" class="img-responsive" alt=""> <!--图片url-->
                     </div>
                     <div class="wid_blog-right">
-                        <h2>Main  Description</h2>
-                        <p>假装这里是我们第一步要做的步骤，然后学习学习学习！！！！</p><!--主要内容-->
+                       
+                        <p id ="mainInfo" > first</p><!--主要内容-->
  
                     </div>
                     <div class="clearfix"> </div>
@@ -231,9 +268,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
             <div class="col-md-10 col_1_of_2 span_1_of_2">
             <div class="col-md-11 col-sm-offset-2">
-               <a href="case_step2.html"> <button id="Previs" class="btn-primary btn" onclick="Previscc">下翻页</button></a>
+               <button id="Previs" class="btn-primary btn" onclick="NextPages()">下翻页</button>
             <div class="col-md-6 col-sm-offset-2">
-                <button  id="NextOne"  class="btn-primary btn" onclick="nextcc">上翻页</button>
+                <button  id="NextOne"  class="btn-primary btn" onclick="PrePages()">上翻页</button>
            <div class="clearfix"> </div>
 
 
