@@ -27,8 +27,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/bootstrap.min.js"></script>
 <script>
   var base_url = 'http://121.42.33.171:8765';
-  $(document).ready(function(){
-     function intercepter(){
+  function intercepter(){
     var token = getCookie('token');
       if(token == null)
       location.href = "login.html";
@@ -46,7 +45,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     var token = intercepter();
     $.ajax({
       type:'GET',
-      url:base_url+'/depart/8/item',
+      url:base_url+'/manager',
       data:{},
       async:false,
       dataType:'json',
@@ -54,37 +53,36 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         console.log(data);
         var obj = data;
         for (i = 0;i < obj.length;i ++){
-          var item = obj[i];
+          var manager = obj[i];
           var tr = $('<tr class="active"></tr>');
-          var th = $('<th scope="row">'+item.item_id+'</th>');
-          var td_name = $('<td>'+item.item_name+'</td>');
+          var th = $('<th scope="row">'+manager.manager_id+'</th>');
+          var td_name = $('<td>'+manager.manager_name+'</td>');
           var td_button = $('<td></td>');
-          var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+item.item_id+'">编辑</button>');
-          var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+item.item_id+'">删除</button>');
+          var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+manager.manager_id+'">编辑</button>');
+          var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+manager.manager_id+'">删除</button>');
           tr.append(th);
           tr.append(td_name);
           td_button.append(btn_edit);
           td_button.append(btn_delete);
           tr.append(td_button);
-          $("#item_table").append(tr);
+          $("#manager_table").append(tr);
         }
         $(".edit_btn").click(function(){
-          item_id = $(this).val();
-          location.href = 'edit_item.html?item_id=' + item_id+'&depart_id=8';
+          user_id = $(this).val();
+          location.href = 'edit_user.html?manager.id=' + manager_id;
         });
         $(".delete_btn").click(function(){
           if(confirm("确定删除吗？"))
           {                       
-             item_id = $ (this).val();             
+             user_id = $ (this).val();             
              $.ajax({
                 type:'DELETE',
-                url:base_url+'/depart/8/item/'+item_id,
-                data:{item_id:item_id},
+                url:base_url+'/manager/'+manager_id,
+                data:{manager_id:manager_id},
                 dataType:'json',
-                async:false,
                 success:function(data){
                     alert('成功删除');
-                    $(this).parents("tr").remove();
+                    $ (this).parents("tr").remove();
                 },
                 error:function(){
                     alert('服务器发生未知错误');
@@ -204,7 +202,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<form class="navbar-form navbar-right">
               <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
             </form>
-           <div class="navbar-default sidebar" role="navigation">
+            <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
             <li>
@@ -251,6 +249,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                      <li>
                         <a href="itemtype_manage.html">物品类别管理</a>
                     </li>
+                     <li>
+                        <a href="manager_manage.html">管理员信息管理</a>
+                    </li>
+
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -263,48 +265,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
 	   <div class="xs">
-  	 <h3>药品管理</h3>
+  	 <h3>用户信息管理</h3>
   	<div class="bs-example4" data-example-id="contextual-table">
-      <div class="row">
-        <div class="col-md-2 grid_box1" style="height: 30px;padding-right: 0px;width: 80px;">
-          <h4 id="caseid">药品ID:</h4>
+    <div class="">
+        <div class="col-md-2 grid_box1" style="height: 30px;padding-right: 0px;width: 130px;">
+          <h3 id="h3">用户名字:</h3>
         </div>
-        <div class="col-md-2 grid_box1" style="height: 30x;padding-left: 0px;width: 115px;">
-          <input type="text" class="form-control1" placeholder="输入病例ID" style="height: 25px;">
+        <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 115px;">
+          <input type="text" class="form-control1" placeholder="输入用户id" style="height: 30px;">
         </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;width: 95px;padding-right: 0px;">
-          <h4 id="casename">药品名称:</h4>
-        </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
-          <input type="text" class="form-control1" placeholder="输入病例名称" style="height: 25px;">
-        </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;width: 95px;padding-right: 0px;">
-          <h4 id="casetyoe">药品类别:</h4>
-        </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
-          <input type="text" class="form-control1" placeholder="输入病例类别" style="height: 25px;">
-        </div>
-     <div class="row">
-     <div class="col-sm-4 col-sm-offset-4">
-        <a href="new_item.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
+        <a href="new_manager.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增管理员</button></a>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
-      </dic>
-      </div>
         <div class="clearfix"> </div>
     <table class="table">
       <thead>
         <tr>
-          <th>药品ID</th>
-          <th>药品名称</th>
+          <th>管理员ID</th>
+          <th>管理员名</th>
           <th>操作</th>
         </tr>
       </thead>
-      <tbody id="item_table">
+      <tbody id="manager_table">
         
       </tbody>
     </table>
-   <!--  <div>
+  <!--   <div>
      <ul class="pagination pagination-sm">
      <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
      <li class="active"><a href="#">1</a></li>

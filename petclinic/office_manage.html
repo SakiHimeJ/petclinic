@@ -19,12 +19,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="css/style.css" rel='stylesheet' type='text/css' />
 <link href="css/font-awesome.css" rel="stylesheet"> 
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script> 
+<script src="js/jquery.min.js"></script>
+<!----webfonts--->
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+<!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script>
   var base_url = 'http://121.42.33.171:8765';
   $(document).ready(function(){
+    function intercepter(){
+    var token = getCookie('token');
+      if(token == null)
+      location.href = "login.html";
+    console.log(token);
+    return token;
+    }
+    function getCookie(name)
+    {
+      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+      if(arr=document.cookie.match(reg))
+      return unescape(arr[2]);
+      else
+      return null;
+    }
+    var token = intercepter();
     $.ajax({
       type:'GET',
       url:base_url+'/depart',
@@ -83,6 +102,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       }
     });
   });
+
 </script>
 </head>
 <body>
@@ -230,6 +250,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <a href="office_manage.html">科室管理</a>
                     </li>
+                     <li>
+                        <a href="itemtype_manage.html">物品类别管理</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -283,7 +306,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       <tbody id="office_table">
         </tbody>
     </table>
-    <div>
+   <!--  <div>
      <ul class="pagination pagination-sm">
      <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
      <li class="active"><a href="#">1</a></li>
@@ -294,7 +317,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
      <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
      </ul>
     </div>
-   </div>
+   </div> -->
       </tbody>
     </table>
 

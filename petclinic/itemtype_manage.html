@@ -28,6 +28,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script>
   var base_url = 'http://121.42.33.171:8765';
   $(document).ready(function(){
+     function intercepter(){
+    var token = getCookie('token');
+      if(token == null)
+      location.href = "login.html";
+    console.log(token);
+    return token;
+    }
+    function getCookie(name)
+    {
+      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+      if(arr=document.cookie.match(reg))
+      return unescape(arr[2]);
+      else
+      return null;
+    }
+    var token = intercepter();
     $.ajax({
       type:'GET',
       url:base_url+'/item_type',
@@ -52,10 +68,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           tr.append(td_button);
           $("#type_table").append(tr);
         }
-        // $(".edit_btn").click(function(){
-        //   depart_id = $(this).val();
-        //   location.href = 'edit_office.html?depart_id=' + depart_id ;
-        // });
+        $(".edit_btn").click(function(){
+          type_type_id = $(this).val();
+          location.href = 'edit_itemtype.html?item_type_id=' + item_type_id ;
+        });
         $(".delete_btn").click(function(){
           if(confirm("确定删除吗？"))
           {                       

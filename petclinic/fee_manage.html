@@ -46,7 +46,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     var token = intercepter();
     $.ajax({
       type:'GET',
-      url:base_url+'/depart/8/item',
+      url:base_url+'/depart/2/item',
       data:{},
       async:false,
       dataType:'json',
@@ -66,25 +66,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           td_button.append(btn_edit);
           td_button.append(btn_delete);
           tr.append(td_button);
-          $("#item_table").append(tr);
+          $("#fee_table").append(tr);
         }
         $(".edit_btn").click(function(){
           item_id = $(this).val();
-          location.href = 'edit_item.html?item_id=' + item_id+'&depart_id=8';
+          location.href = 'edit_item.html?item_id=' + item_id +'&depart_id=2';
         });
         $(".delete_btn").click(function(){
           if(confirm("确定删除吗？"))
           {                       
-             item_id = $ (this).val();             
+             depart_id = $ (this).val();             
              $.ajax({
                 type:'DELETE',
-                url:base_url+'/depart/8/item/'+item_id,
-                data:{item_id:item_id},
+                url:base_url+'/depart/2/item/'+item_id,
+                data:{iten_id:item_id},
                 dataType:'json',
                 async:false,
                 success:function(data){
                     alert('成功删除');
-                    $(this).parents("tr").remove();
+                    $ (this).parents("tr").remove();
                 },
                 error:function(){
                     alert('服务器发生未知错误');
@@ -267,26 +267,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   	<div class="bs-example4" data-example-id="contextual-table">
       <div class="row">
         <div class="col-md-2 grid_box1" style="height: 30px;padding-right: 0px;width: 80px;">
-          <h4 id="caseid">药品ID:</h4>
+          <h4 id="caseid">费用ID:</h4>
         </div>
         <div class="col-md-2 grid_box1" style="height: 30x;padding-left: 0px;width: 115px;">
-          <input type="text" class="form-control1" placeholder="输入病例ID" style="height: 25px;">
+          <input type="text" class="form-control1" placeholder="输入费用ID" style="height: 25px;">
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;width: 95px;padding-right: 0px;">
-          <h4 id="casename">药品名称:</h4>
+          <h4 id="casename">费用名称:</h4>
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
-          <input type="text" class="form-control1" placeholder="输入病例名称" style="height: 25px;">
+          <input type="text" class="form-control1" placeholder="输入费用名称" style="height: 25px;">
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;width: 95px;padding-right: 0px;">
-          <h4 id="casetyoe">药品类别:</h4>
+          <h4 id="casetyoe">费用类别:</h4>
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
-          <input type="text" class="form-control1" placeholder="输入病例类别" style="height: 25px;">
+          <input type="text" class="form-control1" placeholder="输入费用类别" style="height: 25px;">
         </div>
      <div class="row">
      <div class="col-sm-4 col-sm-offset-4">
-        <a href="new_item.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
+        <a href="new_tablet.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
       </dic>
@@ -295,16 +295,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <table class="table">
       <thead>
         <tr>
-          <th>药品ID</th>
-          <th>药品名称</th>
+          <th>费用ID</th>
+          <th>费用名称</th>
           <th>操作</th>
         </tr>
       </thead>
-      <tbody id="item_table">
+      <tbody id="fee_table">
         
       </tbody>
     </table>
-   <!--  <div>
+    <!-- <div>
      <ul class="pagination pagination-sm">
      <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
      <li class="active"><a href="#">1</a></li>

@@ -28,6 +28,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script type="text/javascript">
   var base_url = 'http://121.42.33.171:8765';
   $(document).ready(function(){
+    function intercepter(){
+    var token = getCookie('token');
+      if(token == null)
+      location.href = "login.html";
+    console.log(token);
+    return token;
+    }
+    function getCookie(name)
+    {
+      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+      if(arr=document.cookie.match(reg))
+      return unescape(arr[2]);
+      else
+      return null;
+    }
+    var token = intercepter();
     $("#type_form").submit(function(){
       //禁用form默认提交，使用ajax提交
       return false;

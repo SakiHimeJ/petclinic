@@ -25,6 +25,83 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
+<script>
+  var base_url = 'http://121.42.33.171:8765';
+  $(document).ready(function(){
+     function intercepter(){
+    var token = getCookie('token');
+      if(token == null)
+      location.href = "login.html";
+    console.log(token);
+    return token;
+    }
+    function getCookie(name)
+    {
+      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+      if(arr=document.cookie.match(reg))
+      return unescape(arr[2]);
+      else
+      return null;
+    }
+    var token = intercepter();
+    $.ajax({
+      type:'GET',
+      url:base_url+'/depart/7/item',
+      data:{},
+      async:false,
+      dataType:'json',
+      success:function(data){
+        console.log(data);
+        var obj = data;
+        for (i = 0;i < obj.length;i ++){
+          var item = obj[i];
+          var tr = $('<tr class="active"></tr>');
+          var th = $('<th scope="row">'+item.item_id+'</th>');
+          var td_name = $('<td>'+item.item_name+'</td>');
+          var td_button = $('<td></td>');
+          var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+item.item_id+'">编辑</button>');
+          var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+item.item_id+'">删除</button>');
+          tr.append(th);
+          tr.append(td_name);
+          td_button.append(btn_edit);
+          td_button.append(btn_delete);
+          tr.append(td_button);
+          $("#doc_table").append(tr);
+        }
+        $(".edit_btn").click(function(){
+          item_id = $(this).val();
+          location.href = 'edit_item.html?item_id=' + item_id+'&depart_id=7';
+        });
+        $(".delete_btn").click(function(){
+          if(confirm("确定删除吗？"))
+          {                       
+             item_id = $ (this).val();             
+             $.ajax({
+                type:'DELETE',
+                url:base_url+'/depart/7/item/'+item_id,
+                data:{item_id:item_id},
+                dataType:'json',
+                async:false,
+                success:function(data){
+                    alert('成功删除');
+                    $ (this).parents("tr").remove();
+                },
+                error:function(){
+                    alert('服务器发生未知错误');
+                },
+             });
+          }                 
+        });
+
+
+      },
+      error:function(data){
+        alert('服务器发生未知错误');
+      }
+    });
+  });
+
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -171,6 +248,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <a href="office_manage.html">科室管理</a>
                     </li>
+                     <li>
+                        <a href="itemtype_manage.html">物品类别管理</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -203,16 +283,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
           <input type="text" class="form-control1" placeholder="输入患者类别" style="height: 25px;">
-        </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;width: 80px;padding-right: 0px;">
-          <h4 id="caseavailable">有效性:</h4>
-        </div>
-        <div class="checkbox-inline"><label><input type="checkbox"> 有效</label></div>
-        <div class="checkbox-inline" style="padding-right: 20px;"><label><input type="checkbox" checked="">无效</label></div>
-       </div>
+          </div>
      <div class="row">
      <div class="col-sm-4 col-sm-offset-4">
-        <a href="newDocument.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
+        <a href="new_item.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
         <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
       </dic>
@@ -222,118 +296,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       <thead>
         <tr>
           <th>档案ID</th>
-          <th>患者名称</th>
-          <th>患者类别</th>
-          <th>有效性</th>
+          <th>档案名称</th>
           <th>操作</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="active">
-          <th scope="row">1</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-
-          <th scope="row">2</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="success">
-          <th scope="row">3</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">4</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="info">
-          <th scope="row">5</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">6</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="warning">
-          <th scope="row">7</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">8</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-        <tr class="danger">
-          <th scope="row">9</th>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>Column content</td>
-          <td>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">编辑</button>
-          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">删除</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div>
-     <ul class="pagination pagination-sm">
-     <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-     <li class="active"><a href="#">1</a></li>
-     <li><a href="#">2</a></li>
-     <li><a href="#">3</a></li>
-     <li><a href="#">4</a></li>
-     <li><a href="#">5</a></li>
-     <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-     </ul>
-    </div>
-   </div>
+      <tbody id="doc_table">
+       
       </tbody>
     </table>
 
