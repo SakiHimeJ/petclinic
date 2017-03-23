@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>虚拟宠物医院管理系统</title>
+<title>虚拟宠物医院</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
@@ -26,15 +26,58 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/d3.v3.js"></script>
 <script src="js/rickshaw.js"></script>
 <script type="text/javascript">
+	//写cookies
+	  function setCookie(name,value,days)
+	  {
+	    var Days = days;
+	    if(days>0){
+	      var exp = new Date();
+	      exp.setTime(exp.getTime() + Days*24*60*60*1000);
+	      document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+	    }
+	    else
+	      document.cookie = name + "="+ escape (value)+";";
+	  }
+
+	  function getCookie(name)
+	  {
+	    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	    if(arr=document.cookie.match(reg))
+	    return unescape(arr[2]);
+	    else
+	    return null;
+	  }
+
+	  function delCookie(name)
+	  {
+	    var exp = new Date();
+	    exp.setTime(exp.getTime() - 1);
+	    var cval=getCookie(name);
+	    if(cval!=null)
+	    document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+	  }
+
+	//缩放时自动调整大小
 	window.onresize = function(){
 		var width = parseFloat($('#3dframe').css('width'));
 		var height = width / 3.0;
 		$('#3dframe').css('height',height);
 	}
+	
+	//登陆拦截
+	function intercepter(){
+		var token = getCookie('token');
+    	if(token == null) 
+			location.href = "login.html";
+		console.log(token);
+		return token;
+  	}
+
 	$(document).ready(function(){
 		var width = parseFloat($('#3dframe').css('width'));
 		var height = width / 3.0;
 		$('#3dframe').css('height',height);
+		var token = intercepter();
 	});
 </script>
 </head>

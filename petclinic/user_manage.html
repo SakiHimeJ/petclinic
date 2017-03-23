@@ -20,22 +20,40 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="css/font-awesome.css" rel="stylesheet"> 
 <!-- jQuery -->
 <script src="js/jquery.min.js"></script>
-<!----webfonts--->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
-<!---//webfonts--->  
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
-<script>
+<script type="text/javascript">
   var base_url = 'http://121.42.33.171:8765';
+  function getCookie(name)
+  {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+    else
+    return null;
+  }
+    //登陆拦截
+    function intercepter(){
+      var token = getCookie('token');
+        if(token == null)
+        location.href = "login.html";
+      console.log(token);
+      return token;
+    }
+    var token = intercepter();
   $(document).ready(function(){
     $.ajax({
       type:'GET',
       url:base_url+'/user',
       data:{},
-      async:false,
       dataType:'json',
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
       success:function(data){
         console.log(data);
+        //处理页面展示
         var obj = data;
         for (i = 0;i < obj.length;i ++){
           var user = obj[i];
@@ -52,6 +70,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           tr.append(td_button);
           $("#user_table").append(tr);
         }
+        //添加页面回调
         $(".edit_btn").click(function(){
           user_id = $(this).val();
           location.href = 'edit_user.html?user_id=' + user_id;
@@ -84,7 +103,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       }
     });
   });
-
 </script>
 </head>
 <body>
@@ -246,21 +264,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	   <div class="xs">
   	 <h3>用户信息管理</h3>
   	<div class="bs-example4" data-example-id="contextual-table">
-    <div class="">
+    <div class="row">
         <div class="col-md-2 grid_box1" style="height: 30px;padding-right: 0px;width: 130px;">
-          <h3 id="h3">用户名字:</h3>
+          <h4 id="h3">用户名字:</h4>
         </div>
         <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 115px;">
           <input type="text" class="form-control1" placeholder="输入用户id" style="height: 30px;">
         </div>
-        <div class="col-md-2 grid_box1" style="height: 30px;width: 130px;">
-          <h3 id="h3">有效性:</h3>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <a href ="new_user.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
+          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
+          <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
         </div>
-        <div class="checkbox-inline"><label><input type="checkbox"> 有效</label></div>
-        <div class="checkbox-inline" style="padding-right: 20px;"><label><input type="checkbox" checked="">无效</label></div>
-        <a href ="new_user.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
-        <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
-        <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
         <div class="clearfix"> </div>
     <table class="table">
       <thead>

@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
+<title>虚拟宠物医院</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
@@ -27,7 +27,65 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
   var base_url = 'http://121.42.33.171:8765';
+   function getCookie(name)
+    {
+      var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+      if(arr=document.cookie.match(reg))
+      return unescape(arr[2]);
+      else
+      return null;
+    }
+
+  //登陆拦截
+  function intercepter(){
+    var token = getCookie('token');
+      if(token == null) 
+      location.href = "login.html";
+    console.log(token);
+    return token;
+    }
+  var token = intercepter();
+
   $(document).ready(function(){
+    var urlinfo = window.location.href; //获取url
+    var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
+    //console.log(paramlist);
+    var params = {};
+    if(paramlist.length > 0){
+      for(i = 0;i < paramlist.length;i ++){
+        kv = paramlist[i]
+        key = kv.split("=")[0];
+        value = kv.split("=")[1];
+        params[key] = value;
+      }
+    }
+    console.log(params);
+    if(params['depart_id'] != null && params['depart_id'] != undefined){
+      $("#title").html('科室管理>>科室信息');
+      $("#btn_div").hide();
+      $.ajax({
+        type:'GET',
+        url:base_url+'/depart/'+params['depart_id'],
+        data:{},
+        dataType:'json',
+        // beforeSend: function(request) {
+        //     console.log(token);  
+        //     request.setRequestHeader("token", token);  
+        // }, 
+        success:function(data){
+          var depart_name = data.depart_name;
+          var depart_type = data.depart_type;
+          var depart_desc = data.depart_desc;
+          $("#depart_name").val(depart_name).attr('disabled',true);
+          $("#depart_type").val(depart_type).attr('disabled',true);
+          $("#depart_desc").val(depart_desc).attr('disabled',true);
+        },
+        error:function(data){
+          alert("服务器发生未知错误");
+        }
+      });
+    }
+
     $("#depart_form").submit(function(){
       //禁用form默认提交，使用ajax提交
       return false;
@@ -209,6 +267,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <a href="office_manage.html">科室管理</a>
                     </li>
+                     <li>
+                        <a href="itemtype_manage.html">物品类别管理</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -221,19 +282,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
        <div class="xs">
-     <h3>科室管理>>新增科室</h3>
+     <h3 id="title">科室管理>>新增科室</h3>
      <div>
        <form class="form-horizontal" id="depart_form">
                 <div class="form-group">
                   <label for="disabledinput" class="col-sm-2 control-label">科室名称:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="depart_name" placeholder="Default Input">
+                    <input type="text" class="form-control1" id="depart_name" placeholder="请输入科室名称">
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="focusedinput" class="col-sm-2 control-label">科室类别:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="depart_type" placeholder="Default Input">
+                    <!-- <input type="text" class="form-control1" id="depart_type" placeholder="Default Input"> -->
+                    <select name="selector1" id="depart_type" class="form-control1">
+                      <option value="0">办公类</option>
+                      <option value="1">操作类</option>
+                    </select>
                 </div>  
                 </div>
                 <div class="form-group">
@@ -241,7 +306,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                   <div class="col-sm-8">
                        <textarea name="txtarea1" cols="50" rows="4" class="form-control11" id="depart_desc"></textarea></div>
                   </div>
-                <div class="row"><div class="col-sm-3 col-sm-offset-3">
+                <div class="row" id="btn_div"><div class="col-sm-3 col-sm-offset-3">
                       <button class="btn-success btn" id="depart_submit">Submit</button>
                       <button class="btn-default btn" id="depart_cancel">Cancel</button>
           </div></div>

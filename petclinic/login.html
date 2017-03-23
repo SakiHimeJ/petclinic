@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>虚拟宠物医院管理系统</title>
+<title>虚拟宠物医院</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
@@ -23,7 +23,38 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
-  base_url = "http://api.petclinic.com";
+  //写cookies
+  function setCookie(name,value,days)
+  {
+    var Days = days;
+    if(days>0){
+      var exp = new Date();
+      exp.setTime(exp.getTime() + Days*24*60*60*1000);
+      document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    }
+    else
+      document.cookie = name + "="+ escape (value)+";";
+  }
+
+  function getCookie(name)
+  {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+    else
+    return null;
+  }
+
+  function delCookie(name)
+  {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=getCookie(name);
+    if(cval!=null)
+    document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+  }
+
+  base_url = "http://121.42.33.171:8765";
   $(document).ready(function(){
     $("#login_form").submit(function(){
       //禁用form默认提交，使用ajax提交
@@ -34,52 +65,55 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       username = $("#login_form").find("[name='username']").val();
       password = $("#login_form").find("[name='password']").val();
       is_manager = $("#login_form").find("input[name='is_manager']:checked").val() == "true";
+
       //for test
-      if(username == "admin" || password == "admin"){
-        alert("登陆成功");
-        if(is_manager == false)
-          location.href = "guide.html";
-        else
-          location.href = "usermanagement.html";
-        return;
-      }
-      else{
-        alert("用户名或密码错误");
-        return;
-      }
+      // if(username == "admin" && password == "admin"){
+      //   delCookie("token");
+      //   delCookie("username");
+      //   delCookie("password");
+      //   setCookie("token","testtoken",0);
+      //   setCookie("username",username,0);
+      //   setCookie("password",password,0);
+      //   if(is_manager == false)
+      //     location.href = "guide.html";
+      //   else
+      //     location.href = "user_manage.html";
+      //   return;
+      // }
+      // else{
+      //   alert('用户名或密码错误');
+      // }
+
       if(username == "" || password == ""){
         alert("用户名或密码不能为空");
         return;
       }
+
       $.ajax({
         type: "POST",
         url: base_url + "/login",
         data: {username:username, password:password,is_manager:is_manager},
         dataType: "json",
         success: function(data){
-                    switch(data.status){
-                      case 200:
-                        token = data.token;
-                        alert("登陆成功");
-                        if(is_manager == false)
-                          location.href = "guide.html?&token="+token;
-                        else
-                          location.href = "usermanagement.html?&token="+token;
-                        return;
-                      case 401:
-                        alert(data.message);
-                        return;
-                      case 0:
-                        alert(data.message);
-                        return;
-                      default:
-                        alert("网络异常");
-                        return;
-                    }
-                 },
+              console.log(data);
+              
+              delCookie("token");
+              delCookie("username");
+              delCookie("password");
+
+              var token = data;
+              if(data != undefined)
+                setCookie("token",data,0);
+              setCookie("username",username,0);
+              setCookie("password",password,0);
+              if(is_manager == false)
+                location.href = "guide.html";
+              else
+                location.href = "user_manage.html";
+           },
         error: function(data){
-                    alert("服务器出现未知错误");
-                 }
+            alert("服务器出现未知错误");
+         }
       });
     });
   });

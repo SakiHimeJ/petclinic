@@ -3,7 +3,8 @@
         "author": "G04",
         "firstScene": "hallway",
         "sceneFadeDuration": 2000,
-        "autoLoad":true
+        "autoLoad":true,
+        "compass":true
     },
     
     "scenes": {
@@ -92,15 +93,15 @@
                     "pitch": 8,
                     "yaw": -150,
                     "type": "info",
-                    "text": "右侧科室1",
-                    "URL": "../../../officemanagement.html"
+                    "text": "档案室",
+                    "URL": "../../../new_office.html?depart_id=7"
                 },
                 {
                     "pitch": -2,
                     "yaw": -74,
                     "type": "info",
                     "text": "门诊办公室",
-                    "URL": "../../../officemanagement.html"
+                    "URL": "../../../new_office.html?depart_id=2"
                 }
             ]
         },
@@ -127,29 +128,29 @@
                     "pitch": 8,
                     "yaw": -118,
                     "type": "info",
-                    "text": "左侧科室1",
-                    "URL": "../../../officemanagement.html"
+                    "text": "化验室",
+                    "URL": "../../../new_office.html?depart_id=4"
                 },
                 {
                     "pitch": 8.2,
                     "yaw": -105,
                     "type": "info",
-                    "text": "左侧科室2",
-                    "URL": "../../../officemanagement.html"
+                    "text": "影像室",
+                    "URL": "../../../new_office.html?depart_id=5"
                 },
                 {
                     "pitch": 8.6,
                     "yaw": -84,
                     "type": "info",
-                    "text": "左侧科室3",
-                    "URL": "../../../officemanagement.html"
+                    "text": "专科检查",
+                    "URL": "../../../new_office.html?depart_id=3"
                 },
                 {
                     "pitch": 6.7,
                     "yaw": -71,
                     "type": "info",
-                    "text": "左侧科室4",
-                    "URL": "../../../officemanagement.html"
+                    "text": "手术准备室",
+                    "URL": "../../../new_office.html?depart_id=6"
                 }
             ]
         }
