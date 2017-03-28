@@ -7,9 +7,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
+<title>虚拟宠物医院</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
@@ -26,8 +26,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
-  var base_url = 'http://121.42.33.171:8765';
-  var is_manager,token;
+   var base_url = 'http://121.42.33.171:8765';
+   var is_manager,token;
   function getCookie(name)
   {
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
@@ -50,47 +50,68 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     }
     var token = intercepter();
   $(document).ready(function(){
-    $("#tablet_form").submit(function(){
+    $("#edit_manager_form").submit(function(){
       //禁用form默认提交，使用ajax提交
       return false;
     });
-    $("#tablet_cancel").click(function()
-    {
-      $("#tablet_name").val("");
-      $("#tablet_desc").val("");
-    });
-    $("#tablet_submit").click(function(){
-      //form的button真正触发事件
-      item_name = $("#tablet_form").find("[id='tablet_name']").val();
-      item_desc = $("#tablet_form").find("[id='tablet_desc']").val();
-      item_type_id = 3;
-      if(item_name == "" || item_desc == "" ){
-        alert("输入必填项");
-        return;
+    var urlinfo = window.location.href; //获取url
+    var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
+    //console.log(paramlist);
+    var params = {};
+    if(paramlist.length > 0){
+      for(i = 0;i < paramlist.length;i ++){
+        kv = paramlist[i]
+        key = kv.split("=")[0];
+        value = kv.split("=")[1];
+        params[key] = value;
       }
-      if(confirm("确定添加吗？"))
+    }
+    var manager_id = params['manager_id'];
+    console.log(manager_id);
+    //获取指定用户信息
+    $.ajax({
+
+      type:'GET',
+      url:base_url + '/manager/'+ manager_id,
+      data:{manager_id:manager_id},
+      dataType:'json',
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
+      success:function(data){
+          $("#username").val(data.manager_name);
+
+          },
+          error:function(){
+          alert('服务器发生未知错误');
+           },
+    });
+
+    $("#manager_edit_submit").click(function(){
+      if(confirm("确认修改？"))
       {
+      password = $("#password").val();
       $.ajax({
-        type: "POST",
-        url: base_url + "/depart/2/item",
-        data: {item_name:item_name, item_desc:item_desc,item_type_id:item_type_id},
-        dataType: "json",
+         type:'PUT',
+         url:base_url + '/manager/' + manager_id ,
+         data:{password:password},
+         dataType:'json',
          beforeSend: function(request) {
           console.log(token);  
           request.setRequestHeader("token", token);  
       }, 
-        success: function(data){
 
-                    alert("添加成功");
-                    window.location.reload();
-                 },
-        error: function(data){
-                    alert("服务器出现未知错误");
-                 }
-      });
-      }
+         success:function(data){
+          alert('成功修改');
+          },
+          error:function(){
+          alert('服务器发生未知错误');
+          },
     });
-  });
+    }
+    });
+    });
 </script>
 </head>
 <body>
@@ -195,7 +216,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       <form class="navbar-form navbar-right">
               <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
             </form>
-           <div class="navbar-default sidebar" role="navigation">
+            <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
             <li>
@@ -242,6 +263,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <a href="office_manage.html">科室管理</a>
                     </li>
+                     <li>
+                        <a href="itemtype_manage.html">物品类别管理</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -249,33 +273,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
     <!-- /.sidebar-collapse -->
 </div>
-                <!-- /.sidebar-collapse -->
-            </div>
             <!-- /.navbar-static-side -->
         </nav>
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
        <div class="xs">
-     <h3>药品管理>>新增药品</h3>
+     <h3>用户管理>>修改管理员信息</h3>
      <div>
-       <form class="form-horizontal" id="tablet_form">
+       <form class="form-horizontal" id="edit_manager_form">
                 <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">药品名称:</label>
+                  <label for="disabledinput" class="col-sm-2 control-label">用户姓名:</label>
                   <div class="col-sm-4">
-                    <input  type="text" class="form-control1" id="tablet_name" placeholder="Default Input">
+                    <input type="text" class="form-control1" id="username" placeholder="Default Input">
                   </div>
                 </div>
-                 <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">药品说明</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="tablet_desc" cols="50" rows="4" class="form-control11"></textarea></div>
+                <div class="form-group">
+                  <label for="focusedinput" class="col-sm-2 control-label">用户密码:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control1" id="password" placeholder="Default Input">
+                </div>  
                 </div>
-         
-                <hr></hr> 
-          <div class="row"><div class="col-sm-3 col-sm-offset-3">
-                      <button class="btn-success btn" id="tablet_submit">Submit</button>
-                      <button class="btn-default btn" id="tablet_cancel">Cancel</button>
+                <div class="row"><div class="col-sm-2 col-sm-offset-5">
+                      <button class="btn-success btn" id="manager_edit_submit">Submit</button>
           </div></div>
-         </form>
+          </form>
+                <hr></hr> 
+        
      </div>
     </table>
    </div>

@@ -47,6 +47,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     }
     var token = intercepter();
   $(document).ready(function(){
+    if(is_manager == false){
+          $("#manager_list").css('display','none');
+        }
     var urlinfo = window.location.href; //获取url
     var params = {};
     if(urlinfo.split("?").length > 1){
@@ -64,7 +67,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     }
     console.log(params);
     if(params['depart_id'] != null && params['depart_id'] != undefined){
-      $("#title").html('科室管理>>科室信息');
+      $("#title").html('科室信息');
       $("#btn_div").hide();
       $.ajax({
         type:'GET',
@@ -255,7 +258,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
-            <li>
+            <li id="user_list">
                 <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse in">
                     <li>
@@ -275,7 +278,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
-            <li>
+            <li id="manager_list">
                 <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
@@ -339,8 +342,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                        <textarea name="txtarea1" cols="50" rows="4" class="form-control11" id="depart_desc"></textarea></div>
                   </div>
                 <div class="row" id="btn_div"><div class="col-sm-3 col-sm-offset-3">
-                      <button class="btn-success btn" id="depart_submit">Submit</button>
-                      <button class="btn-default btn" id="depart_cancel">Cancel</button>
+                      <button class="btn-success btn" id="depart_submit">确认</button>
+                      <button class="btn-default btn" id="depart_cancel">取消</button>
                 </div></div>
                 <div class="form-group" id="item_table_div" style="display:none">
                   <div class="col-sm-2"></div>

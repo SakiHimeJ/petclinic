@@ -23,6 +23,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script>
+
   var base_url = 'http://121.42.33.171:8765';
   var is_manager,token;
   function getCookie(name)
@@ -61,14 +62,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           request.setRequestHeader("token", token);  
       }, 
       success:function(data){
-        console.log(data);
+        var departtype=new Array();
+        departtype[0]="办公类";
+        departtype[1]="操作类";        console.log(data);
         var obj = data;
         for (i = 0;i < obj.length;i ++){
           var depart = obj[i];
           var tr = $('<tr class="active"></tr>');
           var th = $('<th scope="row">'+depart.depart_id+'</th>');
           var td_name = $('<td>'+depart.depart_name+'</td>');
-          var td_type = $('<td>'+depart.depart_type+'</td>');
+          var td_type = $('<td>'+departtype[depart.depart_type]+'</td>');
           var td_button = $('<td></td>');
           var btn_edit = $('<button type="button" class="btn btn-primary edit_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+depart.depart_id+'">编辑</button>');
           var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="'+depart.depart_id+'">删除</button>');
@@ -304,12 +307,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div class="col-md-2 grid_box1" style="height: 30px;padding-left: 0px;width: 125px;">
           <input type="text" class="form-control1" placeholder="输入科室类别" style="height: 25px;">
         </div>
-     <div class="row">
-     <div class="col-sm-4 col-sm-offset-4">
+        <div>
         <a href="new_office.html"><button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;margin-left: -">新增</button></a>
-        <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">搜索</button>
-        <button type="button" class="btn btn-primary" style="width: 72px;padding-left: 20px;padding-right: 20px;">取消</button>
-      </dic>
+        </div>
+      </div>
       </div>
         <div class="clearfix"> </div>
     <table class="table">

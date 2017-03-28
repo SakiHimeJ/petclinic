@@ -55,8 +55,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     });
     $("#manager_submit").click(function(){
       //form的button真正触发事件
-      username = $("#user_form").find("[id='username']").val();
-      password = $("#user_form").find("[id='password']").val();
+      username = $("#manager_form").find("[id='username']").val();
+      password = $("#manager_form").find("[id='password']").val();
       if(username == "" || password == "" ){
         alert("输入必填项");
         return;
@@ -266,8 +266,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>  
                 </div>
                 <div class="row"><div class="col-sm-3 col-sm-offset-3">
-                      <button class="btn-success btn" id="manager_submit">Submit</button>
-                      <button class="btn-default btn" id="manager_cancel">Cancel</button>
+                      <button class="btn-success btn" id="manager_submit">确认</button>
+                      <button class="btn-default btn" id="manager_cancel">取消</button>
           </div></div>
           </form>
                 <hr></hr> 
