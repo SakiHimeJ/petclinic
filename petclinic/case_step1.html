@@ -42,8 +42,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     var objs;
     var con_pic=new Array();
     var con_text=new Array();
+    var con_video=new Array();
     var role_pagination=new Array();
-    var role_title=new Array();
+    
+    var page_title=new Array();
     var d1=document.getElementById("mainInfo1");
     var d2=document.getElementById("mainInfo2");
     var d3=document.getElementById("mainInfo3");
@@ -110,7 +112,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       	{
           var role_page = obj[i];
           role_pagination.push(role_page.pagination);
-          role_title.push(role_page.page_title);
+          page_title.push(role_page.page_title);
           
         }
                    
@@ -147,6 +149,10 @@ console.log(page_size);
               con_text[i].push(objs.page_content[k].text_content);
               console.log(k);
          	}
+          if(objs.page_content[k].content_type==2)
+          {
+              con_pic[i].push(objs.page_content[k].video_content.video_address);
+          }
          	if(objs.page_content[k].content_type==3)
          	{
               con_pic[i].push(objs.page_content[k].picture_content.picture_address);
@@ -161,12 +167,12 @@ console.log(page_size);
 
   }
   
-
-
+      
+      document.getElementById("my_title").innerHTML=page_title[0];
      $("#mainInfo1").text(con_text[0][0]);
      $("#mainInfo2").text(con_text[0][1]);
      $("#mainInfo3").text(con_text[0][2]);
-
+      
 
 })
 
@@ -182,6 +188,8 @@ function NextPages()
              $("#mainInfo2").text(con_text[i+1][1]);
              $("#mainInfo3").text(con_text[i+1][2]);
              page_id++;
+             document.getElementById("my_title").innerHTML=page_title[ page_id];
+             
              break;
         	}
         }
@@ -203,6 +211,8 @@ function NextPages()
              $("#mainInfo2").text(con_text[i-1][1]);
              $("#mainInfo3").text(con_text[i-1][2]);
              page_id--;
+             document.getElementById("my_title").innerHTML=page_title[ page_id];
+             
              break;
         	}
         }
@@ -384,7 +394,7 @@ function NextPages()
        <!--第一页-->
     
  <div class="col-md-12 col_1_of_2 span_1_of_2">
-        <span style="font-size:20px;color:blue;"><strong> &nbsp &nbsp &nbsp静脉注射流程</strong></span>
+        <span id="my_title" style="font-size:20px;color:blue;"><strong></strong></span>
                 <br>
             <div class="col-md-12 col-sm-offset-2">
                
