@@ -1,0 +1,561 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>虚拟宠物医院</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+  <script type="application/x-javascript">
+  addEventListener("load", function() {
+    setTimeout(hideURLbar, 0);
+  }, false);
+
+  function hideURLbar() {
+    window.scrollTo(0, 1);
+
+  }
+  </script>
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel='stylesheet' type='text/css' />
+  <link href="css/font-awesome.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="js/jquery.min.js"></script>
+  <!----webfonts--->
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+  <!---//webfonts--->
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- 方便字符串格式化的工具 -->
+  <script src="js/string.js"></script>
+  <script type="text/javascript">
+  var base_url = 'http://121.42.33.171:8765';
+  var is_manager, token;
+
+  function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+      return unescape(arr[2]);
+    else
+      return null;
+  }
+  //登陆拦截
+  function intercepter() {
+    token = getCookie('token');
+    is_manager = 'true' == getCookie('is_manager');
+    console.log(is_manager);
+    if (token == null /*|| is_manager == false*/ ) {
+      location.href = "login.html";
+      alert('请重新登陆');
+    }
+    console.log(token);
+    return token;
+  }
+  var token = intercepter();
+  $(document).ready(function() {
+    $("#edit_case_form").submit(function() {
+      //禁用form默认提交，使用ajax提交
+      return false;
+    });
+    var urlinfo = window.location.href; //获取url
+    var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
+    //console.log(paramlist);
+    var params = {};
+    if (paramlist.length > 0) {
+      for (i = 0; i < paramlist.length; i++) {
+        kv = paramlist[i]
+        key = kv.split("=")[0];
+        value = kv.split("=")[1];
+        params[key] = value;
+      }
+    }
+    var case_id = params['case_id'];
+    console.log(case_id);
+
+    //获取指定案例信息
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/case/' + case_id,
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        var case_name = data.case_info.case_name;
+        var case_desc = data.case_info.case_desc;
+        $("#case_name").val(case_name);
+        $("#case_desc").val(case_desc);
+
+        for (i = 0; i < data.categories.length; i++) {
+          var category = data.categories[i];
+          var new_category = $(String.format("<div class='category_group'> <div class='category_title'> <span>病例模块</span> <button class='btn-success btn category_button' onclick='delete_category(this)'> 删除模块 </button> <button class='btn-success btn category_button' onclick='add_text(this)'> 添加文本内容 </button> <button class='btn-success btn category_button' onclick='add_video(this)'> 添加视频内容 </button> <button class='btn-success btn category_button' onclick='add_picture(this)'> 添加图片内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块标题:</label> <div class='col-sm-4'> <input type='text' class='form-control1' placeholder='Default Input' value='{0}'> </div> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块描述:</label> <div class='col-sm-4'> <input type='text' class='form-control1' placeholder='Default Input'  value='{1}'> </div> </div></div>", category.category_name, category.category_desc))
+          $('#submit-row').before(new_category);
+          
+          for (j = 0; j < category.category_content.length; j++) {
+            var content = category.category_content[j];
+            if (content.case_content_type == 1) {
+              //text content
+              var element = $(String.format("<div class='content_group' content_type='1'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>文本内容:</label> <div class='col-sm-8'> <textarea cols='80' rows='10'>{0}</textarea> </div> </div> </div>", content.text_content));
+              new_category.append(element);
+            } else if (content.case_content_type == 2) {
+              //video content
+              var new_video = $(
+                String.format("<div class='content_group'  content_type='2'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>视频:</label> <video class='video-js' controls preload='auto' poster='{0}' data-setup='{}'><source src='{1}' type='video/mp4'></source></video> </div> </div>",
+                  base_url + '/' + content.screenshot,
+                  base_url + '/' + content.video_address
+                  )
+                );
+              new_category.append(new_video);
+
+            } else if (content.case_content_type == 3) {
+              //picture content
+              var new_picture = $(
+                String.format("<div class='content_group' content_type='3'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>图片:</label> <img src='{0}'/> </div> </div>",
+                  content.picture_address
+                  )
+                );
+              new_category.append(new_picture);
+            } else {
+              alert('invalid content type:' + content.case_content_type);
+            }
+          }
+        }
+      },
+      error: function() {
+        alert('服务器发生未知错误');
+      },
+    });
+
+    $("#case_edit_submit").click(function() {
+      if (confirm("确认修改？")) {
+        var data = [];
+        var category_list = $("#edit_case_form .category_group");
+        for (var i = 1; i < category_list.length; i++) {
+          var category_inputs = $(category_list[i]).find('input');
+          var category_data = {};
+          category_data.category_name = $(category_inputs[0]).val();
+          category_data.category_desc = $(category_inputs[1]).val();
+          var contents = [];
+          var content_list = $(category_list[i]).find('.content_group');
+          for (var j = 0; j < content_list.length; j++) {
+            var content_el = $(content_list[j]);
+            if (content_el.attr('content_type') == '1') {
+              contents.push({
+                case_content_type: 1, 
+                text_content: $(content_el.find('textarea')[0]).text()
+              });
+            }
+            else if (content_el.attr('content_type') == '2') {
+
+            }
+            else if (content_el.attr('content_type') == '3') {
+
+            }
+            else {
+              console.log('error: invalid content_type');
+            }
+          }
+          category_data.category_content = contents;
+
+          data.push(JSON.stringify(category_data));
+        }
+        console.log(data);
+        
+        $.ajax({
+          type: 'PUT',
+          url: base_url + '/case/' + case_id,
+          data: {
+            categories: data
+          },
+          dataType: 'json',
+          beforeSend: function(request) {
+            console.log(token);
+            request.setRequestHeader("token", token);
+          },
+
+          success: function(data) {
+            alert('成功修改');
+          },
+          error: function() {
+            alert('服务器发生未知错误');
+          },
+        });
+        
+      }
+    });
+  });
+
+  function delete_content(el) {
+    if (confirm("确认删除内容？")) {
+      $(el).parent().parent().remove();
+    }
+  }
+
+  function delete_category(el) {
+    if (confirm("确认删除模块？")) {
+      $(el).parent().parent().remove();
+    }
+  }
+
+  function add_category(el) {
+    var new_category = $("<div class='category_group'> <div class='category_title'> <span>病例模块</span> <button class='btn-success btn category_button' onclick='delete_category(this)'> 删除模块 </button> <button class='btn-success btn category_button' onclick='add_text(this)'> 添加文本内容 </button> <button class='btn-success btn category_button' onclick='add_video(this)'> 添加视频内容 </button> <button class='btn-success btn category_button' onclick='add_picture(this)'> 添加图片内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块标题:</label> <div class='col-sm-4'> <input type='text' class='form-control1' placeholder='Default Input'> </div> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块描述:</label> <div class='col-sm-4'> <input type='text' class='form-control1' id='username' placeholder='Default Input'> </div> </div></div>")
+    $('#submit-row').before(new_category);
+  }
+
+  function add_text(el) {
+    var new_text = $("<div class='content_group' content_type='1'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>文本内容:</label> <div class='col-sm-8'> <textarea cols='80' rows='10'></textarea> </div> </div> </div>");
+    $(el).parent().parent().append(new_text);
+  }
+
+  function add_video(el) {
+    var new_video = $("<div class='content_group'  content_type='2'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>视频:</label> </div> </div>");
+    $(el).parent().parent().append(new_video);
+  }
+
+  function add_picture(el) {
+    var new_picture = $("<div class='content_group' content_type='3'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>图片:</label> </div> </div>");
+    $(el).parent().parent().append(new_picture);
+  }
+  </script>
+  <style>
+  .category_group {
+    border-width: 1px;
+    border-color: #ddd;
+    border-style: solid;
+    background-color: #fff;
+    padding: 45px 15px 15px;
+    margin: 10px 15px 25px;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .category_title {
+    padding-left: 50px;
+    font-size: 18px;
+    margin: 0px 10px 20px;
+  }
+  
+  .category_button {
+    float: right;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .content_title {
+    padding-left: 50px;
+    font-size: 18px;
+    margin: 0px 10px 20px;
+  }
+  
+  .content_button {
+    float: right;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .content_group {
+    border-width: 1px;
+    border-color: #aaa;
+    border-style: solid;
+    background-color: #ddd;
+    padding: 45px 15px 15px;
+    margin: 10px 15px 25px;
+    border-radius: 4px 4px 0 0;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">宠物医院后台管理系统</a>
+      </div>
+      <!-- /.navbar-header -->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-comments-o"></i><span class="badge">4</span></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-menu-header">
+              <strong>Messages</strong>
+              <div class="progress thin">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                  <span class="sr-only">40% Complete (success)</span>
+                </div>
+              </div>
+            </li>
+            <li class="avatar">
+              <a href="#">
+                <img src="images/1.png" alt="" />
+                <div>New message</div>
+                <small>1 minute ago</small>
+                <span class="label label-info">NEW</span>
+              </a>
+            </li>
+            <li class="avatar">
+              <a href="#">
+                <img src="images/2.png" alt="" />
+                <div>New message</div>
+                <small>1 minute ago</small>
+                <span class="label label-info">NEW</span>
+              </a>
+            </li>
+            <li class="avatar">
+              <a href="#">
+                <img src="images/3.png" alt="" />
+                <div>New message</div>
+                <small>1 minute ago</small>
+              </a>
+            </li>
+            <li class="avatar">
+              <a href="#">
+                <img src="images/4.png" alt="" />
+                <div>New message</div>
+                <small>1 minute ago</small>
+              </a>
+            </li>
+            <li class="avatar">
+              <a href="#">
+                <img src="images/5.png" alt="" />
+                <div>New message</div>
+                <small>1 minute ago</small>
+              </a>
+            </li>
+            <li class="avatar">
+              <a href="#">
+                <img src="images/pic1.png" alt="" />
+                <div>New message</div>
+                <small>1 minute ago</small>
+              </a>
+            </li>
+            <li class="dropdown-menu-footer text-center">
+              <a href="#">View all messages</a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="images/1.png" alt="" /><span class="badge">9</span></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-menu-header text-center">
+              <strong>Account</strong>
+            </li>
+            <li class="m_2"><a href="#"><i class="fa fa-bell-o"></i> Updates <span class="label label-info">42</span></a></li>
+            <li class="m_2"><a href="#"><i class="fa fa-envelope-o"></i> Messages <span class="label label-success">42</span></a></li>
+            <li class="m_2"><a href="#"><i class="fa fa-tasks"></i> Tasks <span class="label label-danger">42</span></a></li>
+            <li><a href="#"><i class="fa fa-comments"></i> Comments <span class="label label-warning">42</span></a></li>
+            <li class="dropdown-menu-header text-center">
+              <strong>Settings</strong>
+            </li>
+            <li class="m_2"><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+            <li class="m_2"><a href="#"><i class="fa fa-wrench"></i> Settings</a></li>
+            <li class="m_2"><a href="#"><i class="fa fa-usd"></i> Payments <span class="label label-default">42</span></a></li>
+            <li class="m_2"><a href="#"><i class="fa fa-file"></i> Projects <span class="label label-primary">42</span></a></li>
+            <li class="divider"></li>
+            <li class="m_2"><a href="#"><i class="fa fa-shield"></i> Lock Profile</a></li>
+            <li class="m_2"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-right">
+        <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
+      </form>
+      <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+          <ul class="nav" id="side-menu">
+            <li>
+              <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level collapse in">
+                <li>
+                  <a href="guide.html">医院3D导览</a>
+                </li>
+                <li>
+                  <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
+                  <ul class="nav nav-third-level collapse in">
+                    <li>
+                      <a href="#">角色扮演</a>
+                    </li>
+                    <li>
+                      <a href="#">病例学习</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <!-- /.nav-second-level -->
+            </li>
+            <li>
+              <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level">
+                <li>
+                  <a href="user_manage.html">用户信息管理</a>
+                </li>
+                <li>
+                  <a href="manager_manage.html">管理员信息管理</a>
+                </li>
+                <li>
+                  <a href="case_manage.html">病例管理</a>
+                </li>
+                <li>
+                  <a href="tablet_manage.html">药品管理</a>
+                </li>
+                <li>
+                  <a href="fee_manage.html">收费管理</a>
+                </li>
+                <li>
+                  <a href="doc_manage.html">档案管理</a>
+                </li>
+                <li>
+                  <a href="office_manage.html">科室管理</a>
+                </li>
+                <li>
+                  <a href="itemtype_manage.html">物品类别管理</a>
+                </li>
+              </ul>
+              <!-- /.nav-second-level -->
+            </li>
+          </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+      </div>
+      <!-- /.navbar-static-side -->
+    </nav>
+    <div id="page-wrapper">
+      <div class="col-md-12 graphs">
+        <div class="xs">
+          <h3>病例管理>>修改病例</h3>
+          <div>
+            <form class="form-horizontal" id="edit_case_form">
+              <div class='category_group'>
+                <h4 style="margin-left: 30px">病例信息</h4>
+                <div class="form-group">
+                  <label for="disabledinput" class="col-sm-2 control-label">病例名称:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control1" id="case_name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="disabledinput" class="col-sm-2 control-label">病例描述:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control1" id="case_desc">
+                  </div>
+                </div>
+              </div>
+              <div class="category_title" style="margin: 30px 30px 30px; height: 50px">
+                <button class="btn-success btn category_button" onclick="add_category(this)">添加模块</button>
+              </div>
+              <!--
+              <div class='category_group'>
+                <div class="category_title">
+                  <span>病例模块</span>
+                  <button class="btn-success btn category_button" onclick="delete_category(this)">
+                    删除模块
+                  </button>
+                  <button class="btn-success btn category_button" onclick="add_text(this)">
+                    添加文本内容
+                  </button>
+                  <button class="btn-success btn category_button" onclick="add_video(this)">
+                    添加视频内容
+                  </button>
+                  <button class="btn-success btn category_button" onclick="add_picture(this)">
+                    添加图片内容
+                  </button>
+                </div>
+                <div class="form-group category_name">
+                  <label for="disabledinput" class="col-sm-2 control-label">模块标题:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control1" placeholder="Default Input">
+                  </div>
+                </div>
+                <div class="form-group category_desc">
+                  <label for="disabledinput" class="col-sm-2 control-label">模块描述:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control1" placeholder="Default Input">
+                  </div>
+                </div>
+                <div class="content_group" content_type='1'>
+                  <div class='content_title'>
+                    <button class="btn-success btn content_button" onclick="delete_content(this)">
+                      删除内容
+                    </button>
+                  </div>
+                  <div class="form-group">
+                    <label for="disabledinput" class="col-sm-2 control-label">文本内容:</label>
+                    <div class="col-sm-8">
+                      <textarea cols="80" rows="10"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="content_group" content_type='3'>
+                  <div class='content_title'>
+                    <button class="btn-success btn content_button" onclick="delete_content(this)">
+                      删除内容
+                    </button>
+                  </div>
+                  <div class="form-group">
+                    <label for="disabledinput" class="col-sm-2 control-label">图片:</label>
+                  </div>
+                </div>
+                <div class="content_group"  content_type='2'>
+                  <div class='content_title'>
+                    <button class="btn-success btn content_button" onclick="delete_content(this)">
+                      删除内容
+                    </button>
+                  </div>
+                  <div class="form-group">
+                    <label for="disabledinput" class="col-sm-2 control-label">视频:</label>
+                  </div>
+                </div>
+              </div>
+              -->
+              <div class="row" id='submit-row'>
+                <div class="col-sm-2 col-sm-offset-5">
+                  <button class="btn-success btn" id="case_edit_submit">Submit</button>
+                </div>
+              </div>
+            </form>
+            <hr></hr>
+          </div>
+          </table>
+        </div>
+        </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.table-responsive -->
+  </div>
+  </div>
+  <div class="copy_layout">
+    <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+  </div>
+  </div>
+  </div>
+  <!-- /#page-wrapper -->
+  </div>
+  <!-- /#wrapper -->
+  <!-- Nav CSS -->
+  <link href="css/custom.css" rel="stylesheet">
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="js/metisMenu.min.js"></script>
+  <script src="js/custom.js"></script>
+</body>
+
+</html>
