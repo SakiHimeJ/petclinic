@@ -146,17 +146,21 @@
             else if (content.case_content_type == 2)
             {
               //video content
-              var video = $("<video class='video-js' controls preload='auto' poster='" + base_url + '/' + content.screenshot + "' data-setup='{}'></video>");
-              var video_source = $("<source src='" + base_url + '/' + content.video_address + "' type='video/mp4'></source>");
+              var video = $("<video class='video-js' controls preload='auto' poster='" + base_url + '/' + content.video_content.screenshot + "' data-setup='{}'></video>");
+              var video_source = $("<source src='" + base_url + '/' + content.video_content.video_address + "' type='video/mp4'></source>");
+              var video_div = $("<div class='col-xs-12 page-content'></div>");
               video.append(video_source);
-              category_desc.append(video);
+              video_div.append(video);
+              category_desc.append(video_div);
               
             }
             else if (content.case_content_type == 3)
             {
               //picture content
-              var element = $("<img src='" + base_url + '/' + content.picture_address + "'/>" );
-              category_desc.append(element);
+              var element = $("<img src='" + base_url + '/' + content.picture_content.picture_address + "' />" );
+              var picture_div = $("<div class='col-xs-12 page-content'></div>");
+              picture_div.append(element);
+              category_desc.append(picture_div);
             }
             else
             {
@@ -181,6 +185,15 @@
     margin-right: auto;
     width: 960px;
     height: 400px;
+  }
+
+  .page-content {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  .page-content img{
+    max-height: 300px; 
+    max-width: 400px;
   }
   </style>
   <!----webfonts--->

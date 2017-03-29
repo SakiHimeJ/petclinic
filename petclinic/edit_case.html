@@ -81,6 +81,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     var case_id = params['case_id'];
     console.log(case_id);
 
+    // get case type
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/case_type',
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        //处理页面展示
+        var obj = data;
+        for (i = 0; i < obj.length; i++) {
+          var casetype = obj[i];
+          var option = $("<option value='" + casetype.case_type_id + "'></option>");
+          option.text(casetype.case_type_name);
+          $("#case_type_select").append(option);
+
+        }
+      },
+      error: function(data) {
+        alert('服务器发生未知错误');
+      }
+    });
+
     //获取指定案例信息
     $.ajax({
       type: 'GET',
@@ -97,12 +124,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         var case_desc = data.case_info.case_desc;
         $("#case_name").val(case_name);
         $("#case_desc").val(case_desc);
+        $("#case_type_select").val(data.case_info.case_type.case_type_id);
 
         for (i = 0; i < data.categories.length; i++) {
           var category = data.categories[i];
           var new_category = $(String.format("<div class='category_group'> <div class='category_title'> <span>病例模块</span> <button class='btn-success btn category_button' onclick='delete_category(this)'> 删除模块 </button> <button class='btn-success btn category_button' onclick='add_text(this)'> 添加文本内容 </button> <button class='btn-success btn category_button' onclick='add_video(this)'> 添加视频内容 </button> <button class='btn-success btn category_button' onclick='add_picture(this)'> 添加图片内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块标题:</label> <div class='col-sm-4'> <input type='text' class='form-control1' placeholder='Default Input' value='{0}'> </div> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块描述:</label> <div class='col-sm-4'> <input type='text' class='form-control1' placeholder='Default Input'  value='{1}'> </div> </div></div>", category.category_name, category.category_desc))
           $('#submit-row').before(new_category);
-          
+
           for (j = 0; j < category.category_content.length; j++) {
             var content = category.category_content[j];
             if (content.case_content_type == 1) {
@@ -112,20 +140,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             } else if (content.case_content_type == 2) {
               //video content
               var new_video = $(
-                String.format("<div class='content_group'  content_type='2'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>视频:</label> <video class='video-js' controls preload='auto' poster='{0}' data-setup='{}'><source src='{1}' type='video/mp4'></source></video> </div> </div>",
-                  base_url + '/' + content.screenshot,
-                  base_url + '/' + content.video_address
-                  )
-                );
+                String.format("<div class='content_group' content_type='2' content_id='{0}'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> <button class='btn-success btn content_button' onclick='change_video(this)'> 选择视频 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>视频:</label> <video class='video-js' controls preload='auto' poster='{1}'> <source src='{2}' type='video/mp4'></source> </video> </div> </div>",
+                  content.video_content.video_id,
+                  base_url + '/' + content.video_content.screenshot,
+                  base_url + '/' + content.video_content.video_address
+                )
+              );
               new_category.append(new_video);
 
             } else if (content.case_content_type == 3) {
               //picture content
               var new_picture = $(
-                String.format("<div class='content_group' content_type='3'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>图片:</label> <img src='{0}'/> </div> </div>",
-                  content.picture_address
-                  )
-                );
+                String.format("<div class='content_group' content_type='3' content_id='{0}'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> <button class='btn-success btn content_button' onclick='change_picture(this)'> 选择图片 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>图片:</label> <img src='{1}' style='max-height: 300px; max-width: 400px' /> </div> </div>",
+                  content.picture_content.picture_id,
+                  base_url + '/' + content.picture_content.picture_address
+                )
+              );
               new_category.append(new_picture);
             } else {
               alert('invalid content type:' + content.case_content_type);
@@ -140,44 +170,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     $("#case_edit_submit").click(function() {
       if (confirm("确认修改？")) {
-        var data = [];
-        var category_list = $("#edit_case_form .category_group");
-        for (var i = 1; i < category_list.length; i++) {
-          var category_inputs = $(category_list[i]).find('input');
-          var category_data = {};
-          category_data.category_name = $(category_inputs[0]).val();
-          category_data.category_desc = $(category_inputs[1]).val();
-          var contents = [];
-          var content_list = $(category_list[i]).find('.content_group');
-          for (var j = 0; j < content_list.length; j++) {
-            var content_el = $(content_list[j]);
-            if (content_el.attr('content_type') == '1') {
-              contents.push({
-                case_content_type: 1, 
-                text_content: $(content_el.find('textarea')[0]).text()
-              });
-            }
-            else if (content_el.attr('content_type') == '2') {
-
-            }
-            else if (content_el.attr('content_type') == '3') {
-
-            }
-            else {
-              console.log('error: invalid content_type');
-            }
-          }
-          category_data.category_content = contents;
-
-          data.push(JSON.stringify(category_data));
-        }
-        console.log(data);
-        
         $.ajax({
           type: 'PUT',
-          url: base_url + '/case/' + case_id,
+          url: base_url + '/caseinfo/' + case_id,
           data: {
-            categories: data
+            case_type_id: $("#case_type_select").val(),
+            case_name: $("#case_name").val(),
+            case_desc: $("#case_desc").val()
           },
           dataType: 'json',
           beforeSend: function(request) {
@@ -186,13 +185,75 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           },
 
           success: function(data) {
-            alert('成功修改');
+            var data = [];
+            var category_list = $("#edit_case_form .category_group");
+            for (var i = 1; i < category_list.length; i++) {
+              var category_inputs = $(category_list[i]).find('input');
+              var category_data = {};
+              category_data.category_name = $(category_inputs[0]).val();
+              category_data.category_desc = $(category_inputs[1]).val();
+              var contents = [];
+              var content_list = $(category_list[i]).find('.content_group');
+              for (var j = 0; j < content_list.length; j++) {
+                var content_el = $(content_list[j]);
+                if (content_el.attr('content_type') == '1') {
+                  contents.push({
+                    case_content_type: 1,
+                    text_content: $(content_el.find('textarea')[0]).val(),
+                    picture_content: null,
+                    video_content: null
+                  });
+                } else if (content_el.attr('content_type') == '2') {
+                  contents.push({
+                    case_content_type: 2,
+                    text_content: null,
+                    picture_content: null,
+                    video_content: content_el.attr('content_id')
+                  });
+                } else if (content_el.attr('content_type') == '3') {
+                  contents.push({
+                    case_content_type: 3,
+                    text_content: null,
+                    picture_content: content_el.attr('content_id'),
+                    video_content: null
+                  });
+                } else {
+                  console.log('error: invalid content_type');
+                }
+              }
+              category_data.category_content = contents;
+              console.log(category_data);
+
+              data.push(JSON.stringify(category_data));
+            }
+            console.log(data);
+
+            $.ajax({
+              type: 'PUT',
+              url: base_url + '/case/' + case_id,
+              data: {
+                categories: data
+              },
+              dataType: 'json',
+              beforeSend: function(request) {
+                console.log(token);
+                request.setRequestHeader("token", token);
+              },
+
+              success: function(data) {
+                alert('成功修改');
+              },
+              error: function() {
+                alert('服务器发生未知错误');
+              },
+            });
+
           },
           error: function() {
             alert('服务器发生未知错误');
           },
         });
-        
+
       }
     });
   });
@@ -220,13 +281,120 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   }
 
   function add_video(el) {
-    var new_video = $("<div class='content_group'  content_type='2'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>视频:</label> </div> </div>");
+    var new_video = $("<div class='content_group' content_type='2'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> <button class='btn-success btn content_button' onclick='change_video(this)'> 选择视频 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>视频:</label> <video class='video-js' controls preload='auto' poster=''> <source src='' type='video/mp4'></source> </video> </div> </div>");
     $(el).parent().parent().append(new_video);
   }
 
   function add_picture(el) {
-    var new_picture = $("<div class='content_group' content_type='3'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>图片:</label> </div> </div>");
+    var new_picture = $("<div class='content_group' content_type='3'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> <button class='btn-success btn content_button' onclick='change_picture(this)'> 选择图片 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>图片:</label> <img src='' style='max-height: 300px; max-width: 400px' /> </div> </div>");
     $(el).parent().parent().append(new_picture);
+  }
+
+  function change_video(el) {
+    // get video
+    $("#video_list").empty();
+    to_change = $(el);
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/video',
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        //处理页面展示
+        var obj = data;
+        var list = $("<div class='list-group'></div>");
+        for (i = 0; i < obj.length; i++) {
+          var video = obj[i];
+          var option = $(
+              "<button type='button' class='list-group-item' onclick='$(\"#video_picker\").data(\"selected\", this)'></button>"
+            );
+          option.text(video.video_name);
+          option.data('content_obj', video);
+          list.append(option)
+        }
+        $("#video_list").append(list);
+      },
+      error: function(data) {
+        alert('服务器发生未知错误');
+      }
+    });
+    $('#video_picker').modal('show');
+  }
+
+  function check_video() {
+    var content_group = to_change.parent().parent();
+    var selected = $("#video_picker").data("selected");
+    var video = $(selected).data('content_obj');
+    content_group.attr('content_id', video.video_id);
+    var old_video = $(content_group.find('video')[0]);
+    var new_video = $(
+        String.format(
+          "<video class='video-js' controls preload='auto' poster='{0}'> <source src='{1}' type='video/mp4'></source> </video>", 
+          base_url + '/' + video.screenshot,
+          base_url + '/' + video.video_address)
+        );
+    old_video.parent().append(new_video);
+    old_video.remove();
+
+    $('#video_picker').modal('hide');
+  }
+
+  function change_picture(el) {
+    $("#picture_list").empty();
+    to_change = $(el);
+    // get picture
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/picture',
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        //处理页面展示
+        var obj = data;
+        var list = $("<div class='list-group'></div>");
+        for (i = 0; i < obj.length; i++) {
+          var picture = obj[i];
+          var option = $(
+              "<button type='button' class='list-group-item' onclick='$(\"#picture_picker\").data(\"selected\", this)'></button>"
+            );
+          option.text(picture.picture_name);
+          option.data('content_obj', picture);
+          list.append(option)
+        }
+        $("#picture_list").append(list);
+      },
+      error: function(data) {
+        alert('服务器发生未知错误');
+      }
+    });
+    $('#picture_picker').modal('show');
+  }
+
+  function check_picture() {
+    var content_group = to_change.parent().parent();
+    var selected = $("#picture_picker").data("selected");
+    var picture = $(selected).data('content_obj');
+    content_group.attr('content_id', picture.picture_id);
+    var old_picture = $(content_group.find('img')[0]);
+    var new_picture = $(
+        String.format(
+          "<img src='{0}' style='max-height: 300px; max-width: 400px' />", 
+          base_url + '/' + picture.picture_address)
+        );
+    old_picture.parent().append(new_picture);
+    old_picture.remove();
+
+    $('#picture_picker').modal('hide');
   }
   </script>
   <style>
@@ -456,74 +624,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <input type="text" class="form-control1" id="case_desc">
                   </div>
                 </div>
+                <div class="form-group">
+                  <label for="disabledinput" class="col-sm-2 control-label">病例类型:</label>
+                  <div class="col-sm-4">
+                    <select id='case_type_select'>
+                    </select>
+                  </div>
+                </div>
               </div>
               <div class="category_title" style="margin: 30px 30px 30px; height: 50px">
                 <button class="btn-success btn category_button" onclick="add_category(this)">添加模块</button>
               </div>
-              <!--
-              <div class='category_group'>
-                <div class="category_title">
-                  <span>病例模块</span>
-                  <button class="btn-success btn category_button" onclick="delete_category(this)">
-                    删除模块
-                  </button>
-                  <button class="btn-success btn category_button" onclick="add_text(this)">
-                    添加文本内容
-                  </button>
-                  <button class="btn-success btn category_button" onclick="add_video(this)">
-                    添加视频内容
-                  </button>
-                  <button class="btn-success btn category_button" onclick="add_picture(this)">
-                    添加图片内容
-                  </button>
-                </div>
-                <div class="form-group category_name">
-                  <label for="disabledinput" class="col-sm-2 control-label">模块标题:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" placeholder="Default Input">
-                  </div>
-                </div>
-                <div class="form-group category_desc">
-                  <label for="disabledinput" class="col-sm-2 control-label">模块描述:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" placeholder="Default Input">
-                  </div>
-                </div>
-                <div class="content_group" content_type='1'>
-                  <div class='content_title'>
-                    <button class="btn-success btn content_button" onclick="delete_content(this)">
-                      删除内容
-                    </button>
-                  </div>
-                  <div class="form-group">
-                    <label for="disabledinput" class="col-sm-2 control-label">文本内容:</label>
-                    <div class="col-sm-8">
-                      <textarea cols="80" rows="10"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="content_group" content_type='3'>
-                  <div class='content_title'>
-                    <button class="btn-success btn content_button" onclick="delete_content(this)">
-                      删除内容
-                    </button>
-                  </div>
-                  <div class="form-group">
-                    <label for="disabledinput" class="col-sm-2 control-label">图片:</label>
-                  </div>
-                </div>
-                <div class="content_group"  content_type='2'>
-                  <div class='content_title'>
-                    <button class="btn-success btn content_button" onclick="delete_content(this)">
-                      删除内容
-                    </button>
-                  </div>
-                  <div class="form-group">
-                    <label for="disabledinput" class="col-sm-2 control-label">视频:</label>
-                  </div>
-                </div>
-              </div>
-              -->
               <div class="row" id='submit-row'>
                 <div class="col-sm-2 col-sm-offset-5">
                   <button class="btn-success btn" id="case_edit_submit">Submit</button>
@@ -543,6 +654,45 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   <!-- /.table-responsive -->
   </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal fade bs-example-modal-lg" id="picture_picker" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">选择图片</h4>
+        </div>
+        <div class="modal-body" id="picture_list">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="check_picture()">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade bs-example-modal-lg" id="video_picker" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">选择视频</h4>
+        </div>
+        <div class="modal-body" id="video_list">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="check_video()">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="copy_layout">
     <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
   </div>

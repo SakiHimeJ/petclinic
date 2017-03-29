@@ -6,55 +6,392 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
 <html>
+
 <head>
-<title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+  <title>虚拟宠物医院</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
- <!-- Bootstrap Core CSS -->
-<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-<!-- Custom CSS -->
-<link href="css/style.css" rel='stylesheet' type='text/css' />
-<link href="css/font-awesome.css" rel="stylesheet"> 
-<!-- jQuery -->
-<script src="js/jquery.min.js"></script>
-<!----webfonts--->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
-<!---//webfonts--->  
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
-<script>
- $("#case_detail").submit(function(){
+  <script type="application/x-javascript">
+  addEventListener("load", function() {
+    setTimeout(hideURLbar, 0);
+  }, false);
+
+  function hideURLbar() {
+    window.scrollTo(0, 1);
+
+  }
+  </script>
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel='stylesheet' type='text/css' />
+  <link href="css/font-awesome.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="js/jquery.min.js"></script>
+  <!----webfonts--->
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+  <!---//webfonts--->
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- 方便字符串格式化的工具 -->
+  <script src="js/string.js"></script>
+  <script type="text/javascript">
+  var base_url = 'http://121.42.33.171:8765';
+  var is_manager, token;
+
+  function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+      return unescape(arr[2]);
+    else
+      return null;
+  }
+  //登陆拦截
+  function intercepter() {
+    token = getCookie('token');
+    is_manager = 'true' == getCookie('is_manager');
+    console.log(is_manager);
+    if (token == null /*|| is_manager == false*/ ) {
+      location.href = "login.html";
+      alert('请重新登陆');
+    }
+    console.log(token);
+    return token;
+  }
+  var token = intercepter();
+  $(document).ready(function() {
+    $("#edit_case_form").submit(function() {
       //禁用form默认提交，使用ajax提交
       return false;
     });
-  function dianji(id)
-  {
-    document.getElementById(id).style.display='block'; 
+    
+    case_id = null;
+
+    // get case type
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/case_type',
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        //处理页面展示
+        var obj = data;
+        for (i = 0; i < obj.length; i++) {
+          var casetype = obj[i];
+          var option = $("<option value='" + casetype.case_type_id + "'></option>");
+          option.text(casetype.case_type_name);
+          $("#case_type_select").append(option);
+
+        }
+      },
+      error: function(data) {
+        alert('服务器发生未知错误');
+      }
+    });
+
+    $("#case_edit_submit").click(function() {
+      if (confirm("确认新建？")) {
+        $.ajax({
+          type: 'POST',
+          url: base_url + '/caseinfo',
+          data: {
+            case_type_id: $("#case_type_select").val(),
+            case_name: $("#case_name").val(),
+            case_desc: $("#case_desc").val()
+          },
+          dataType: 'json',
+          beforeSend: function(request) {
+            console.log(token);
+            request.setRequestHeader("token", token);
+          },
+
+          success: function(data) {
+            case_id = data.case_id;
+            var data = [];
+            var category_list = $("#edit_case_form .category_group");
+            for (var i = 1; i < category_list.length; i++) {
+              var category_inputs = $(category_list[i]).find('input');
+              var category_data = {};
+              category_data.category_name = $(category_inputs[0]).val();
+              category_data.category_desc = $(category_inputs[1]).val();
+              var contents = [];
+              var content_list = $(category_list[i]).find('.content_group');
+              for (var j = 0; j < content_list.length; j++) {
+                var content_el = $(content_list[j]);
+                if (content_el.attr('content_type') == '1') {
+                  contents.push({
+                    case_content_type: 1,
+                    text_content: $(content_el.find('textarea')[0]).val(),
+                    picture_content: null,
+                    video_content: null
+                  });
+                } else if (content_el.attr('content_type') == '2') {
+                  contents.push({
+                    case_content_type: 2,
+                    text_content: null,
+                    picture_content: null,
+                    video_content: content_el.attr('content_id')
+                  });
+                } else if (content_el.attr('content_type') == '3') {
+                  contents.push({
+                    case_content_type: 3,
+                    text_content: null,
+                    picture_content: content_el.attr('content_id'),
+                    video_content: null
+                  });
+                } else {
+                  console.log('error: invalid content_type');
+                }
+              }
+              category_data.category_content = contents;
+              console.log(category_data);
+
+              data.push(JSON.stringify(category_data));
+            }
+            console.log(data);
+
+            $.ajax({
+              type: 'PUT',
+              url: base_url + '/case/' + case_id,
+              data: {
+                categories: data
+              },
+              dataType: 'json',
+              beforeSend: function(request) {
+                console.log(token);
+                request.setRequestHeader("token", token);
+              },
+
+              success: function(data) {
+                alert('成功修改');
+                location.href = 'edit_case.html?case_id=' + data.case_info.case_id;
+              },
+              error: function() {
+                alert('服务器发生未知错误');
+              },
+            });
+
+          },
+          error: function() {
+            alert('服务器发生未知错误');
+          },
+        });
+
+      }
+    });
+  });
+
+  function delete_content(el) {
+    if (confirm("确认删除内容？")) {
+      $(el).parent().parent().remove();
+    }
   }
-</script>
+
+  function delete_category(el) {
+    if (confirm("确认删除模块？")) {
+      $(el).parent().parent().remove();
+    }
+  }
+
+  function add_category(el) {
+    var new_category = $("<div class='category_group'> <div class='category_title'> <span>病例模块</span> <button class='btn-success btn category_button' onclick='delete_category(this)'> 删除模块 </button> <button class='btn-success btn category_button' onclick='add_text(this)'> 添加文本内容 </button> <button class='btn-success btn category_button' onclick='add_video(this)'> 添加视频内容 </button> <button class='btn-success btn category_button' onclick='add_picture(this)'> 添加图片内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块标题:</label> <div class='col-sm-4'> <input type='text' class='form-control1' placeholder='Default Input'> </div> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>模块描述:</label> <div class='col-sm-4'> <input type='text' class='form-control1' id='username' placeholder='Default Input'> </div> </div></div>")
+    $('#submit-row').before(new_category);
+  }
+
+  function add_text(el) {
+    var new_text = $("<div class='content_group' content_type='1'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>文本内容:</label> <div class='col-sm-8'> <textarea cols='80' rows='10'></textarea> </div> </div> </div>");
+    $(el).parent().parent().append(new_text);
+  }
+
+  function add_video(el) {
+    var new_video = $("<div class='content_group' content_type='2'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> <button class='btn-success btn content_button' onclick='change_video(this)'> 选择视频 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>视频:</label> <video class='video-js' controls preload='auto' poster=''> <source src='' type='video/mp4'></source> </video> </div> </div>");
+    $(el).parent().parent().append(new_video);
+  }
+
+  function add_picture(el) {
+    var new_picture = $("<div class='content_group' content_type='3'> <div class='content_title'> <button class='btn-success btn content_button' onclick='delete_content(this)'> 删除内容 </button> <button class='btn-success btn content_button' onclick='change_picture(this)'> 选择图片 </button> </div> <div class='form-group'> <label for='disabledinput' class='col-sm-2 control-label'>图片:</label> <img src='' style='max-height: 300px; max-width: 400px' /> </div> </div>");
+    $(el).parent().parent().append(new_picture);
+  }
+
+  function change_video(el) {
+    // get video
+    $("#video_list").empty();
+    to_change = $(el);
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/video',
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        //处理页面展示
+        var obj = data;
+        var list = $("<div class='list-group'></div>");
+        for (i = 0; i < obj.length; i++) {
+          var video = obj[i];
+          var option = $(
+              "<button type='button' class='list-group-item' onclick='$(\"#video_picker\").data(\"selected\", this)'></button>"
+            );
+          option.text(video.video_name);
+          option.data('content_obj', video);
+          list.append(option)
+        }
+        $("#video_list").append(list);
+      },
+      error: function(data) {
+        alert('服务器发生未知错误');
+      }
+    });
+    $('#video_picker').modal('show');
+  }
+
+  function check_video() {
+    var content_group = to_change.parent().parent();
+    var selected = $("#video_picker").data("selected");
+    var video = $(selected).data('content_obj');
+    content_group.attr('content_id', video.video_id);
+    var old_video = $(content_group.find('video')[0]);
+    var new_video = $(
+        String.format(
+          "<video class='video-js' controls preload='auto' poster='{0}'> <source src='{1}' type='video/mp4'></source> </video>", 
+          base_url + '/' + video.screenshot,
+          base_url + '/' + video.video_address)
+        );
+    old_video.parent().append(new_video);
+    old_video.remove();
+
+    $('#video_picker').modal('hide');
+  }
+
+  function change_picture(el) {
+    $("#picture_list").empty();
+    to_change = $(el);
+    // get picture
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/picture',
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        //处理页面展示
+        var obj = data;
+        var list = $("<div class='list-group'></div>");
+        for (i = 0; i < obj.length; i++) {
+          var picture = obj[i];
+          var option = $(
+              "<button type='button' class='list-group-item' onclick='$(\"#picture_picker\").data(\"selected\", this)'></button>"
+            );
+          option.text(picture.picture_name);
+          option.data('content_obj', picture);
+          list.append(option)
+        }
+        $("#picture_list").append(list);
+      },
+      error: function(data) {
+        alert('服务器发生未知错误');
+      }
+    });
+    $('#picture_picker').modal('show');
+  }
+
+  function check_picture() {
+    var content_group = to_change.parent().parent();
+    var selected = $("#picture_picker").data("selected");
+    var picture = $(selected).data('content_obj');
+    content_group.attr('content_id', picture.picture_id);
+    var old_picture = $(content_group.find('img')[0]);
+    var new_picture = $(
+        String.format(
+          "<img src='{0}' style='max-height: 300px; max-width: 400px' />", 
+          base_url + '/' + picture.picture_address)
+        );
+    old_picture.parent().append(new_picture);
+    old_picture.remove();
+
+    $('#picture_picker').modal('hide');
+  }
+  </script>
+  <style>
+  .category_group {
+    border-width: 1px;
+    border-color: #ddd;
+    border-style: solid;
+    background-color: #fff;
+    padding: 45px 15px 15px;
+    margin: 10px 15px 25px;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .category_title {
+    padding-left: 50px;
+    font-size: 18px;
+    margin: 0px 10px 20px;
+  }
+  
+  .category_button {
+    float: right;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .content_title {
+    padding-left: 50px;
+    font-size: 18px;
+    margin: 0px 10px 20px;
+  }
+  
+  .content_button {
+    float: right;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .content_group {
+    border-width: 1px;
+    border-color: #aaa;
+    border-style: solid;
+    background-color: #ddd;
+    padding: 45px 15px 15px;
+    margin: 10px 15px 25px;
+    border-radius: 4px 4px 0 0;
+  }
+  </style>
 </head>
+
 <body>
-<div id="wrapper">
-     <!-- Navigation -->
-        <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">宠物医院后台管理系统</a>
-                
-            </div>
-            <!-- /.navbar-header -->
- <ul class="nav navbar-nav navbar-right">
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">宠物医院后台管理系统</a>
+      </div>
+      <!-- /.navbar-header -->
+      <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-comments-o"></i><span class="badge">4</span></a>
-              <ul class="dropdown-menu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-comments-o"></i><span class="badge">4</span></a>
+          <ul class="dropdown-menu">
             <li class="dropdown-menu-header">
               <strong>Messages</strong>
               <div class="progress thin">
@@ -65,7 +402,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </li>
             <li class="avatar">
               <a href="#">
-                <img src="images/1.png" alt=""/>
+                <img src="images/1.png" alt="" />
                 <div>New message</div>
                 <small>1 minute ago</small>
                 <span class="label label-info">NEW</span>
@@ -73,7 +410,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </li>
             <li class="avatar">
               <a href="#">
-                <img src="images/2.png" alt=""/>
+                <img src="images/2.png" alt="" />
                 <div>New message</div>
                 <small>1 minute ago</small>
                 <span class="label label-info">NEW</span>
@@ -81,40 +418,40 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </li>
             <li class="avatar">
               <a href="#">
-                <img src="images/3.png" alt=""/>
+                <img src="images/3.png" alt="" />
                 <div>New message</div>
                 <small>1 minute ago</small>
               </a>
             </li>
             <li class="avatar">
               <a href="#">
-                <img src="images/4.png" alt=""/>
+                <img src="images/4.png" alt="" />
                 <div>New message</div>
                 <small>1 minute ago</small>
               </a>
             </li>
             <li class="avatar">
               <a href="#">
-                <img src="images/5.png" alt=""/>
+                <img src="images/5.png" alt="" />
                 <div>New message</div>
                 <small>1 minute ago</small>
               </a>
             </li>
             <li class="avatar">
               <a href="#">
-                <img src="images/pic1.png" alt=""/>
+                <img src="images/pic1.png" alt="" />
                 <div>New message</div>
                 <small>1 minute ago</small>
               </a>
             </li>
             <li class="dropdown-menu-footer text-center">
               <a href="#">View all messages</a>
-            </li> 
-              </ul>
             </li>
-          <li class="dropdown">
-              <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="images/1.png" alt=""/><span class="badge">9</span></a>
-              <ul class="dropdown-menu">
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="images/1.png" alt="" /><span class="badge">9</span></a>
+          <ul class="dropdown-menu">
             <li class="dropdown-menu-header text-center">
               <strong>Account</strong>
             </li>
@@ -131,244 +468,174 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <li class="m_2"><a href="#"><i class="fa fa-file"></i> Projects <span class="label label-primary">42</span></a></li>
             <li class="divider"></li>
             <li class="m_2"><a href="#"><i class="fa fa-shield"></i> Lock Profile</a></li>
-            <li class="m_2"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>  
-              </ul>
-            </li>
+            <li class="m_2"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>
+          </ul>
+        </li>
       </ul>
       <form class="navbar-form navbar-right">
-              <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
-            </form>
-            <div class="navbar-default sidebar" role="navigation">
-    <div class="sidebar-nav navbar-collapse">
-        <ul class="nav" id="side-menu">
+        <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
+      </form>
+      <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+          <ul class="nav" id="side-menu">
             <li>
-                <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse in">
+              <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level collapse in">
+                <li>
+                  <a href="guide.html">医院3D导览</a>
+                </li>
+                <li>
+                  <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
+                  <ul class="nav nav-third-level collapse in">
                     <li>
-                        <a href="guide.html">医院3D导览</a>
+                      <a href="#">角色扮演</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level collapse in">
-                            <li>
-                                <a href="#">角色扮演</a>
-                            </li>
-                            <li>
-                                <a href="#">病例学习</a>
-                            </li>
-                        </ul>
+                      <a href="#">病例学习</a>
                     </li>
-                </ul>
-                <!-- /.nav-second-level -->
+                  </ul>
+                </li>
+              </ul>
+              <!-- /.nav-second-level -->
             </li>
             <li>
-                <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="user_manage.html">用户信息管理</a>
-                    </li>
-                    <li>
-                        <a href="case_manage.html">病例管理</a>
-                    </li>
-                    <li>
-                        <a href="tablet_manage.html">药品管理</a>
-                    </li>
-                    <li>
-                        <a href="fee_manage.html">收费管理</a>
-                    </li>
-                    <li>
-                        <a href="doc_manage.html">档案管理</a>
-                    </li>
-                    <li>
-                        <a href="office_manage.html">科室管理</a>
-                    </li>
-                </ul>
-                <!-- /.nav-second-level -->
+              <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level">
+                <li>
+                  <a href="user_manage.html">用户信息管理</a>
+                </li>
+                <li>
+                  <a href="manager_manage.html">管理员信息管理</a>
+                </li>
+                <li>
+                  <a href="case_manage.html">病例管理</a>
+                </li>
+                <li>
+                  <a href="tablet_manage.html">药品管理</a>
+                </li>
+                <li>
+                  <a href="fee_manage.html">收费管理</a>
+                </li>
+                <li>
+                  <a href="doc_manage.html">档案管理</a>
+                </li>
+                <li>
+                  <a href="office_manage.html">科室管理</a>
+                </li>
+                <li>
+                  <a href="itemtype_manage.html">物品类别管理</a>
+                </li>
+              </ul>
+              <!-- /.nav-second-level -->
             </li>
-        </ul>
-    </div
-    <!-- /.sidebar-collapse -->
-</div>
-            <!-- /.navbar-static-side -->
-        </nav>
-        <div id="page-wrapper">
-        <div class="col-md-12 graphs">
-	   <div class="xs">
-  	 <h3>病例管理>>新增病例</h3>
-     <div>
-       <form class="form-horizontal">
-                <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">病例ID:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="focusedinput" placeholder="Default Input">
-                  </div>  
-                </div>
-                <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">疾病名称:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="focusedinput" placeholder="Default Input">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="radio" class="col-sm-2 control-label">有效性:</label>
-                  <div class="col-sm-8">
-                    <div class="radio-inline"><label><input type="radio" name="ok"> 有效</label></div>
-                    <div class="radio-inline"><label><input type="radio" name="ok">无效</label></div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">病例类别:</label>
-                  <div class="col-sm-4">
-                    <select class="form-control1">
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="opel">Opel</option>
-  <option value="audi">Audi</option>
-</select>
-                  </div>  
-                </div>
-          </form>
-                <hr></hr> 
-          <form class="form-horizontal">
-                <div class="form-group">
-                  <button  type='button' id="addcheckInf" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheckinf')">添加接诊信息</button>
-                </div>
-                <div id="newcheckinf" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">病例接诊</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-                <div class="row"><div class="col-sm-6 col-sm-offset-1">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                 <hr></hr>
-          </form>
-                    <form class="form-horizontal">
-                <div class="form-group">
-                  <button type="button" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheck')">添加病例检查</button>
-                </div>  
-                <div id="newcheck" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">病例检查</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-               <div class="row"><div class="col-sm-6 col-sm-offset-1">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                 <hr></hr>
-          </form>
-                    <form class="form-horizontal">
-                <div class="form-group">
-                  <button type="button" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheck1')">添加诊断结果</button>
-                </div>  
-                <div id="newcheck1" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">诊断</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-                <div class="row"><div class="col-sm-6 col-sm-offset-1">
-                      <button type="button" class="btn-success btn">Submit</button>
-                      <button type="button" class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                 <hr></hr>
-          </form>
-                <form class="form-horizontal">
-                <div class="form-group">
-                  <button type="button" class="btn btn_5 btn-lg btn-link" onclick="dianji('newcheckplan')">添加治疗方案</button>
-                </div>  
-                <div id="newcheckplan" style="display: none;">
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">治疗方案</label>
-                </div>
-                <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">描述：</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加图片:</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                <p class=class="col-sm-4">支持jpg、jpeg、gif、png、bmp格式的图片</p>
-                </div>
-                <div class="form-group">
-                <label for="exampleInputFile" class="col-sm-2 control-label">添加视频：</label>
-                <input type="file" id="exampleInputFile" class="col-sm-4">
-                </div>
-                <div class="row"><div class="col-sm-2 col-sm-offset-1">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-                </div></div>
-                </div>
-                <hr></hr>
-          </form>
-                 <div class="row"><div class="col-sm-2 col-sm-offset-5">
-                      <button class="btn-success btn">Submit</button>
-                      <button class="btn-default btn">Cancel</button>
-                 </div></div>
-           </form>
-     </div>
-    </table>
-   </div>
-      </tbody>
-    </table>
-
-			</div>
-    </div><!-- /.table-responsive -->
-    </div><!-- /.table-responsive -->
-  </div>
-  </div>
-  <div class="copy_layout">
-      <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
-  </div>
-   </div>
+          </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
       </div>
-      <!-- /#page-wrapper -->
-   </div>
-    <!-- /#wrapper -->
-<!-- Nav CSS -->
-<link href="css/custom.css" rel="stylesheet">
-<!-- Metis Menu Plugin JavaScript -->
-<script src="js/metisMenu.min.js"></script>
-<script src="js/custom.js"></script>
+      <!-- /.navbar-static-side -->
+    </nav>
+    <div id="page-wrapper">
+      <div class="col-md-12 graphs">
+        <div class="xs">
+          <h3>病例管理>>新建病例</h3>
+          <div>
+            <form class="form-horizontal" id="edit_case_form">
+              <div class='category_group'>
+                <h4 style="margin-left: 30px">病例信息</h4>
+                <div class="form-group">
+                  <label for="disabledinput" class="col-sm-2 control-label">病例名称:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control1" id="case_name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="disabledinput" class="col-sm-2 control-label">病例描述:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control1" id="case_desc">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="disabledinput" class="col-sm-2 control-label">病例类型:</label>
+                  <div class="col-sm-4">
+                    <select id='case_type_select'>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="category_title" style="margin: 30px 30px 30px; height: 50px">
+                <button class="btn-success btn category_button" onclick="add_category(this)">添加模块</button>
+              </div>
+              <div class="row" id='submit-row'>
+                <div class="col-sm-2 col-sm-offset-5">
+                  <button class="btn-success btn" id="case_edit_submit">Submit</button>
+                </div>
+              </div>
+            </form>
+            <hr></hr>
+          </div>
+          </table>
+        </div>
+        </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.table-responsive -->
+  </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade bs-example-modal-lg" id="picture_picker" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">选择图片</h4>
+        </div>
+        <div class="modal-body" id="picture_list">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="check_picture()">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade bs-example-modal-lg" id="video_picker" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">选择视频</h4>
+        </div>
+        <div class="modal-body" id="video_list">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="check_video()">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="copy_layout">
+    <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+  </div>
+  </div>
+  </div>
+  <!-- /#page-wrapper -->
+  </div>
+  <!-- /#wrapper -->
+  <!-- Nav CSS -->
+  <link href="css/custom.css" rel="stylesheet">
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="js/metisMenu.min.js"></script>
+  <script src="js/custom.js"></script>
 </body>
+
 </html>
