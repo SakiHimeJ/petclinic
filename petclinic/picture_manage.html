@@ -1,0 +1,252 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+  <script type="application/x-javascript">
+  addEventListener("load", function() {
+    setTimeout(hideURLbar, 0);
+  }, false);
+
+  function hideURLbar() {
+    window.scrollTo(0, 1);
+  }
+  </script>
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel='stylesheet' type='text/css' />
+  <link href="css/font-awesome.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="js/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/Huploadify.css" />
+  <script type="text/javascript" src="js/jquery.Huploadify.js"></script>
+  <!----webfonts--->
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+  <!---//webfonts--->
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  var base_url = 'http://121.42.33.171:8765';
+  var is_manager, token;
+
+  function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+      return unescape(arr[2]);
+    else
+      return null;
+  }
+  //登陆拦截
+  function intercepter() {
+    token = getCookie('token');
+    is_manager = 'true' == getCookie('is_manager');
+    console.log(is_manager);
+
+
+    if (token == null /*|| is_manager == false*/ ) {
+      location.href = "login.html";
+      alert('请重新登陆');
+    }
+    console.log(token);
+    return token;
+  }
+  var token = intercepter();
+
+  function get_roleplay_list(type) {
+    $("#picture_table").empty();
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/picture',
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        //处理页面展示
+        var obj = data;
+        for (i = 0; i < obj.length; i++) {
+          var picinfo = obj[i];
+          var tr = $('<tr class="active"></tr>');
+          var th = $('<th scope="row">' + picinfo.picture_id + '</th>');
+          var td_name = $('<td>' + picinfo.picture_name + '</td>');
+          var td_addr = $('<td>' + picinfo.picture_address + '</td>');
+          var td_thumbnail = $("<img class='thumbnail' src='" + base_url + '/' + picinfo.picture_address + "'/>");
+          var td_button = $('<td></td>');
+          var btn_delete = $('<button type="button" class="btn btn-primary delete_btn" style="width: 72px;padding-left: 20px;padding-right: 20px;" value="' + picinfo.picture_id + '">删除</button>');
+          tr.append(th);
+          tr.append(td_name);
+          tr.append(td_addr);
+          tr.append(td_thumbnail);
+          td_button.append(btn_delete);
+          tr.append(td_button);
+          $("#picture_table").append(tr);
+        }
+        //添加页面回调
+        $(".delete_btn").click(function() {
+          if (confirm("确定删除吗？")) {
+            role_id = $(this).val();
+            $.ajax({
+              type: 'DELETE',
+              url: base_url + '/picture/' + role_id,
+              data: {
+                role_id: role_id
+              },
+              dataType: 'json',
+              async: false,
+              beforeSend: function(request) {
+                console.log(token);
+                request.setRequestHeader("token", token);
+              },
+
+              success: function(data) {
+                alert('成功删除');
+                window.location.reload();
+              },
+              error: function() {
+                alert('服务器发生未知错误');
+              },
+            });
+          }
+        });
+
+
+      },
+      error: function(data) {
+        alert('服务器发生未知错误');
+      }
+    });
+  }
+
+  $(document).ready(function() {
+    if (is_manager == false) {
+      $("#manager_list").css('display', 'none');
+    }
+
+    get_roleplay_list();
+  });
+
+  $(function() {
+    $("#navigation").load("nav.html");
+  });
+
+  function finish() {
+    window.location.reload();
+    $("#picture_uploader").modal('hide');
+  }
+
+  $(function() {
+    var up = $('#upload').Huploadify({
+      auto: true,
+      method: 'POST',
+      fileTypeExts: '*.jpg;*.jpeg;*.png;*.exe;*.mp3;*.mp4;*.zip;*.doc;*.docx;*.ppt;*.pptx;*.xls;*.xlsx;*.pdf;*.flv',
+      multi: true,
+      fileSizeLimit: 99999999,
+      formData: {},
+      breakPoints: false,
+      saveInfoLocal: true,
+      showUploadedPercent: true, //是否实时显示上传的百分比，如20%
+      showUploadedSize: false,
+      removeTimeout: 9999999,
+      uploader: 'http://121.42.33.171:8765/picture',
+      onUploadSuccess: function(data) {
+        console.log(data);
+      },
+    });
+
+  });
+
+  function show_upload() {
+    $("#picture_uploader").modal('show');
+  }
+  </script>
+  <style type="text/css">
+  .thumbnail {
+    max-height: 200px;
+    max-width: 200px;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id='navigation'></div>
+    <div id="page-wrapper">
+      <div class="col-md-12 graphs">
+        <div class="xs">
+          <h3>图片管理</h3>
+          <div class="bs-example4" data-example-id="contextual-table">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-4">
+                  <button type="button" class="btn btn-primary" onclick="show_upload()" style="width: 72px;padding-left: 20px;padding-right: 20px;border-left-width: 1px;float: right;">上传</button>
+              </div>
+            </div>
+            <div class="row">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>图片ID</th>
+                    <th>图片名称</th>
+                    <th>图片位置</th>
+                    <th>缩略图</th>
+                  </tr>
+                </thead>
+                <tbody id="picture_table">
+                </tbody>
+              </table>
+            </div>
+            </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /.table-responsive -->
+      </div>
+      <!-- /.table-responsive -->
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade bs-example-modal-lg" id="picture_uploader" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">上传图片</h4>
+        </div>
+        <div class="modal-body" id="upload">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="finish()">完成</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="copy_layout">
+    <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+  </div>
+  </div>
+  </div>
+  <!-- /#page-wrapper -->
+  </div>
+  <!-- /#wrapper -->
+  <!-- Nav CSS -->
+  <link href="css/custom.css" rel="stylesheet">
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="js/metisMenu.min.js"></script>
+  <script src="js/custom.js"></script>
+</body>
+
+</html>

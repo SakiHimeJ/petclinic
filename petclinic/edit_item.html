@@ -6,81 +6,90 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
 <html>
+
 <head>
-<title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+  <title>Modern an Admin Panel Category Flat Bootstarp Resposive Website Template | Basic_tables :: w3layouts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
- <!-- Bootstrap Core CSS -->
-<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-<!-- Custom CSS -->
-<link href="css/style.css" rel='stylesheet' type='text/css' />
-<link href="css/font-awesome.css" rel="stylesheet"> 
-<!-- jQuery -->
-<script src="js/jquery.min.js"></script>
-<!----webfonts--->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
-<!---//webfonts--->  
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
-<script type="text/javascript">
-   var base_url = 'http://121.42.33.171:8765';
-   var is_manager,token;
-  function getCookie(name)
-  {
-    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-    if(arr=document.cookie.match(reg))
-    return unescape(arr[2]);
-    else
-    return null;
+  <script type="application/x-javascript">
+  addEventListener("load", function() {
+    setTimeout(hideURLbar, 0);
+  }, false);
+
+  function hideURLbar() {
+    window.scrollTo(0, 1);
   }
-    //登陆拦截
-    function intercepter(){
-      token = getCookie('token');
-      is_manager = 'true' == getCookie('is_manager');
-      console.log(is_manager);
-      if(token == null /*|| is_manager == false*/){
-        location.href = "login.html";
-        alert('请重新登陆');
-      }
-      console.log(token);
-      return token;
+  </script>
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel='stylesheet' type='text/css' />
+  <link href="css/font-awesome.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="js/jquery.min.js"></script>
+  <!----webfonts--->
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+  <!---//webfonts--->
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  var base_url = 'http://121.42.33.171:8765';
+  var is_manager, token;
+
+  function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+      return unescape(arr[2]);
+    else
+      return null;
+  }
+  //登陆拦截
+  function intercepter() {
+    token = getCookie('token');
+    is_manager = 'true' == getCookie('is_manager');
+    console.log(is_manager);
+    if (token == null /*|| is_manager == false*/ ) {
+      location.href = "login.html";
+      alert('请重新登陆');
     }
-    var token = intercepter();
-  $(document).ready(function(){
-     $.ajax({
-      type:'GET',
-      url:base_url+'/item_type',
-      data:{},
-      async:false,
-      dataType:'json',
+    console.log(token);
+    return token;
+  }
+  var token = intercepter();
+  $(document).ready(function() {
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/item_type',
+      data: {},
+      async: false,
+      dataType: 'json',
       beforeSend: function(request) {
-          console.log(token);  
-          request.setRequestHeader("token", token);  
-      }, 
-      success:function(data){
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
         console.log(data);
         var obj = data;
-        for (i = 0;i < obj.length;i ++){
+        for (i = 0; i < obj.length; i++) {
           var item_type = obj[i];
           var val = item_type.item_type_id;
           var txt = item_type.item_type_name;
-          console.log(val+txt);
-          $("#type").append("<option value='"+val+"'>"+txt+"</option>");
+          console.log(val + txt);
+          $("#type").append("<option value='" + val + "'>" + txt + "</option>");
         }
       },
-       error: function(){
-                    alert("服务器出现未知错误");
-                 },
+      error: function() {
+        alert("服务器出现未知错误");
+      },
     });
     var urlinfo = window.location.href; //获取url
     console.log(urlinfo);
     var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
     var params = {};
-    if(paramlist.length > 0){
-      for(i = 0;i < paramlist.length;i ++){
+    if (paramlist.length > 0) {
+      for (i = 0; i < paramlist.length; i++) {
         kv = paramlist[i]
         key = kv.split("=")[0];
         value = kv.split("=")[1];
@@ -88,185 +97,125 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       }
     }
     var item_id = params['item_id'];
-    var depart_id=params['depart_id'];
+    var depart_id = params['depart_id'];
     console.log(item_id + depart_id);
-    $("#item_form").submit(function(){
+    $("#item_form").submit(function() {
       //禁用form默认提交，使用ajax提交
       return false;
     });
     //获取指定用户信息
     $.ajax({
-      type:'GET',
-      url:base_url + '/depart/'+ depart_id +'/item/'+ item_id,
-      data:{item_id:item_id},
+      type: 'GET',
+      url: base_url + '/depart/' + depart_id + '/item/' + item_id,
+      data: {
+        item_id: item_id
+      },
       async: false,
-      dataType:'json',
+      dataType: 'json',
       beforeSend: function(request) {
-          console.log(token);  
-          request.setRequestHeader("token", token);  
-      }, 
-      success:function(data){
-          $("#item_name").val(data.item_name);
-          $("#item_desc").val(data.item_desc);  
-          },
-          error:function(){
-          alert('服务器发生未知错误');
-           },
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        $("#item_name").val(data.item_name);
+        $("#item_desc").val(data.item_desc);
+      },
+      error: function() {
+        alert('服务器发生未知错误');
+      },
     });
 
-    $("#edit_submit").click(function(){
-      if(confirm("确认修改？"))
-      {
-          item_name=$("#item_name").val();
-          item_desc=$("#item_desc").val();
-          item_type_id=$("#type").val();
-          console.log(item_type_id);
-      $.ajax({
-         type:'PUT',
-         url:base_url + '/depart/'+ depart_id + '/item/'+ item_id ,
-         data:{item_name:item_name,item_desc:item_desc,item_type_id:item_type_id},
-         dataType:'json',
-         success:function(data){
-          alert('成功修改');
+    $("#edit_submit").click(function() {
+      if (confirm("确认修改？")) {
+        item_name = $("#item_name").val();
+        item_desc = $("#item_desc").val();
+        item_type_id = $("#type").val();
+        console.log(item_type_id);
+        $.ajax({
+          type: 'PUT',
+          url: base_url + '/depart/' + depart_id + '/item/' + item_id,
+          data: {
+            item_name: item_name,
+            item_desc: item_desc,
+            item_type_id: item_type_id
           },
-          error:function(){
-          alert('服务器发生未知错误');
+          dataType: 'json',
+          success: function(data) {
+            alert('成功修改');
           },
+          error: function() {
+            alert('服务器发生未知错误');
+          },
+        });
+      }
     });
-    }
-    });
-    });
-</script>
+  });
+  $(function() {
+    $("#navigation").load("nav.html");
+  });
+  </script>
 </head>
+
 <body>
-<div id="wrapper">
-     <!-- Navigation -->
-        <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">宠物医院后台管理系统</a>
-                
-            </div>
-            <!-- /.navbar-header -->
-
-      <form class="navbar-form navbar-right">
-              <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
+  <div id="wrapper">
+    <!-- Navigation -->
+    <div id='navigation'></div>
+    <div id="page-wrapper">
+      <div class="col-md-12 graphs">
+        <div class="xs">
+          <h3>物品管理>>修改物品</h3>
+          <div>
+            <form class="form-horizontal" id="item_form">
+              <div class="form-group">
+                <label for="disabledinput" class="col-sm-2 control-label">物品名称:</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control1" id="item_name" placeholder="Default Input">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="txtarea1" class="col-sm-2 control-label">物品类别</label>
+                <div class="col-sm-8">
+                  <select id="type"> </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="txtarea1" class="col-sm-2 control-label">物品说明</label>
+                <div class="col-sm-8">
+                  <textarea name="txtarea1" id="item_desc" cols="50" rows="4" class="form-control11"></textarea>
+                </div>
+              </div>
+              <hr></hr>
+              <div class="row">
+                <div class="col-sm-3 col-sm-offset-3">
+                  <button class="btn-success btn" id="edit_submit">Submit</button>
+                </div>
+              </div>
             </form>
-           <div class="navbar-default sidebar" role="navigation">
-    <div class="sidebar-nav navbar-collapse">
-        <ul class="nav" id="side-menu">
-            <li>
-                <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse in">
-                    <li>
-                        <a href="guide.html">医院3D导览</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level collapse in">
-                            <li>
-                                <a href="#">角色扮演</a>
-                            </li>
-                            <li>
-                                <a href="#">病例学习</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- /.nav-second-level -->
-            </li>
-            <li>
-                <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="user_manage.html">用户信息管理</a>
-                    </li>
-                    <li>
-                        <a href="manager_manage.html">管理员信息管理</a>
-                    </li>
-                    <li>
-                        <a href="case_manage.html">病例管理</a>
-                    </li>
-                    <li>
-                        <a href="tablet_manage.html">药品管理</a>
-                    </li>
-                    <li>
-                        <a href="fee_manage.html">收费管理</a>
-                    </li>
-                    <li>
-                        <a href="doc_manage.html">档案管理</a>
-                    </li>
-                    <li>
-                        <a href="office_manage.html">科室管理</a>
-                    </li>
-                     <li>
-                        <a href="itemtype_manage.html">物品类别管理</a>
-                    </li>
-                </ul>
-                <!-- /.nav-second-level -->
-            </li>
-        </ul>
+          </div>
+          </table>
+        </div>
+        </tbody>
+        </table>
+      </div>
     </div>
-    <!-- /.sidebar-collapse -->
-</div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-        <div id="page-wrapper">
-        <div class="col-md-12 graphs">
-       <div class="xs">
-     <h3>物品管理>>修改物品</h3>
-     <div>
-       <form class="form-horizontal" id="item_form">
-                <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">物品名称:</label>
-                  <div class="col-sm-4">
-                    <input  type="text" class="form-control1" id="item_name" placeholder="Default Input">
-                  </div>
-                </div>
-                 <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">物品类别</label>
-                  <div class="col-sm-8"><select id="type"> </select></div>
-                </div>
-                 <div class="form-group">
-                  <label for="txtarea1" class="col-sm-2 control-label">物品说明</label>
-                  <div class="col-sm-8"><textarea name="txtarea1" id="item_desc" cols="50" rows="4" class="form-control11"></textarea></div>
-                </div>
-         
-                <hr></hr> 
-          <div class="row"><div class="col-sm-3 col-sm-offset-3">
-                      <button class="btn-success btn" id="edit_submit">Submit</button>
-          </div></div>
-         </form>
-     </div>
-    </table>
-   </div>
-      </tbody>
-    </table>
-
-            </div>
-    </div><!-- /.table-responsive -->
-    </div><!-- /.table-responsive -->
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.table-responsive -->
   </div>
   </div>
   <div class="copy_layout">
-      <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+    <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
   </div>
-   </div>
-      </div>
-      <!-- /#page-wrapper -->
-   </div>
-    <!-- /#wrapper -->
-<!-- Nav CSS -->
-<link href="css/custom.css" rel="stylesheet">
-<!-- Metis Menu Plugin JavaScript -->
-<script src="js/metisMenu.min.js"></script>
-<script src="js/custom.js"></script>
+  </div>
+  </div>
+  <!-- /#page-wrapper -->
+  </div>
+  <!-- /#wrapper -->
+  <!-- Nav CSS -->
+  <link href="css/custom.css" rel="stylesheet">
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="js/metisMenu.min.js"></script>
+  <script src="js/custom.js"></script>
 </body>
+
 </html>
