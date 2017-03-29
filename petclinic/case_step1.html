@@ -29,50 +29,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/d3.v3.js"></script>
 <script src="js/rickshaw.js"></script>
 <script type="text/javascript">
-
     var a=new Array('first', 'secoond', 'thrid');
     var b=new Array('images/s1.jpg','images/s2.jpg','images/s3.jpg')
-   
-    function NextPages()
-    {
-        var img = document.getElementById("learnImage");
-          var d1=document.getElementById("mainInfo");
-           for (var i = 0;i<b.length-1;i++) {
-               if(img.getAttribute('src')==b[i])
-               {
-                  img.src=b[i+1];
-                  d1.innerHTML=a[i+1];
-                  break;
-                
-               }
-             
-                  
-           }
-
-    return false;
-    }
-
-    function PrePages()
-    {
-          
-            var img = document.getElementById("learnImage");
-             var d1=document.getElementById("mainInfo");
-             for (var i = 1;i<b.length;i++) {
-               if(img.getAttribute('src')==b[i])
-               {
-                img.src=b[i-1];
-                d1.innerHTML=a[i-1];
-               }
-
-              
-           }
-
-    return false;
-    }
     </script>
-<script>
-var base_url = 'http://121.42.33.171:8765';
-  var is_manager,token;
+
+<script type="text/javascript">
+	var base_url = 'http://121.42.33.171:8765';
+    var is_manager,token;
+    var page_id;
+    var pagination;
+    var page_size;
   function getCookie(name)
   {
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
@@ -94,12 +60,130 @@ var base_url = 'http://121.42.33.171:8765';
       return token;
     }
     var token = intercepter();
-    $(document).ready(function(){
-    if(is_manager == false){
-          $("#manager_list").css('display','none');
-        }
+  $(document).ready(function(){
+    var urlinfo = window.location.href; //获取url
+    console.log(urlinfo);
+    var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
+    var params = {};
+    if(paramlist.length > 0){
+      for(i = 0;i < paramlist.length;i ++){
+        kv = paramlist[i]
+        key = kv.split("=")[0];
+        value = kv.split("=")[1];
+        params[key] = value;
+      }
+    }
+    var role_id = params['role_id'];
+    console.log(role_id);
+    $("#item_form").submit(function(){
+      //禁用form默认提交，使用ajax提交
+      return false;
     });
-    </script>
+    //获取指定用户信息
+  
+    var con_pic=new Array();
+    var con_text=new Array();
+    $.ajax({
+      type:'GET',
+      url:base_url + '/roleplay/'+ role_id +'/pageinfo',
+      data:{role_id:role_id},
+      async: false,
+      dataType:'json',
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
+      success:function(data){
+                    page_title=data.page_title;
+                    pagination=data.pagination;
+                              },
+          error:function(){
+          alert('服务器发生未知错误');
+           },
+    });
+
+//得到了题目和当前的页码
+ $.ajax({
+         type:'GET',
+         url:base_url + '/roleplay/'+ role_id + '/page/'+ pagination ,
+         data:{role_id:role_id,pagination:pagination},
+         dataType:'json',
+         success:function(data){
+         	page_size=data.page_size;
+         	now_pagination=data.pagination
+          },
+          error:function(){
+          alert('服务器发生未知错误');
+          },
+    });
+//得到了相关的页数和第一页内容
+
+
+   
+    });
+console.log(pagination);
+
+  for(i=0;i<page_size;i++)
+  {
+  	pagination=pagination+i;
+     $.ajax({
+         type:'GET',
+         url:base_url + '/roleplay/'+ role_id + '/page/'+ pagination ,
+         data:{role_id:role_id,pagination:pagination},
+         dataType:'json',
+         success:function(data){
+         	if(data.case_content_type==1)
+         	{
+              con_text.push(data.text_content);
+         	}
+         	if(data.case_content_type==3)
+         	{
+              con_pic.push(data.picture_address);
+         	}
+          },
+          error:function(){
+          alert('服务器发生未知错误');
+          },
+    });
+  }
+
+function NextPages()
+    {
+        var img = document.getElementById("learnImage");
+          var d1=document.getElementById("mainInfo");
+           for (var i = 0;i<con_pic.length-1;i++) {
+               if(img.getAttribute('src')==con_pic[i])
+               {
+                  img.src=con_pic[i+1];
+                  d1.innerHTML=con_text[i+1];
+                  break;
+                
+               }     
+           }
+
+    return false;
+    }
+
+    function PrePages()
+    {
+          
+            var img = document.getElementById("learnImage");
+             var d1=document.getElementById("mainInfo");
+             for (var i = 1;i<con_pic.length;i++) {
+               if(img.getAttribute('src')==con_pic[i])
+               {
+                img.src=con_pic[i-1];
+                d1.innerHTML=con_text[i-1];
+               }
+
+              
+           }
+
+    return false;
+    }
+
+
+</script>
 
 </head>
 <body>
