@@ -36,9 +36,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script type="text/javascript">
 	var base_url = 'http://121.42.33.171:8765';
     var is_manager,token;
-    var page_id;
+    var page_id=0;
     var pagination;
     var page_size;
+    var objs;
+    var con_pic=new Array();
+    var con_text=new Array();
+    var role_pagination=new Array();
+    var role_title=new Array();
+    var d1=document.getElementById("mainInfo1");
+    var d2=document.getElementById("mainInfo2");
+    var d3=document.getElementById("mainInfo3");
+
   function getCookie(name)
   {
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
@@ -60,7 +69,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       return token;
     }
     var token = intercepter();
-  $(document).ready(function(){
+  $(document).ready(function()
+  {
     var urlinfo = window.location.href; //获取url
     console.log(urlinfo);
     var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
@@ -81,8 +91,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     });
     //获取指定用户信息
   
-    var con_pic=new Array();
-    var con_text=new Array();
+    
     $.ajax({
       type:'GET',
       url:base_url + '/roleplay/'+ role_id +'/pageinfo',
@@ -94,93 +103,115 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           request.setRequestHeader("token", token);  
       }, 
       success:function(data){
-                    page_title=data.page_title;
-                    pagination=data.pagination;
+           console.log(data);
+           var obj = data;
+           page_size=obj.length;
+      	for (i = 0;i < obj.length;i ++)
+      	{
+          var role_page = obj[i];
+          role_pagination.push(role_page.pagination);
+          role_title.push(role_page.page_title);
+          
+        }
+                   
                               },
           error:function(){
-          alert('服务器发生未知错误');
+          alert('服务器发生未知错误(得到了题目和当前的页码)');
            },
     });
 
-//得到了题目和当前的页码
- $.ajax({
-         type:'GET',
-         url:base_url + '/roleplay/'+ role_id + '/page/'+ pagination ,
-         data:{role_id:role_id,pagination:pagination},
-         dataType:'json',
-         success:function(data){
-         	page_size=data.page_size;
-         	now_pagination=data.pagination
-          },
-          error:function(){
-          alert('服务器发生未知错误');
-          },
-    });
-//得到了相关的页数和第一页内容
+//得到了角色各个页的题目和当前的页码
 
 
-   
-    });
-console.log(pagination);
-
+console.log(page_size);
   for(i=0;i<page_size;i++)
   {
-  	pagination=pagination+i;
+
+  	pagination=role_pagination[i];
+    con_text[i]=new Array();
+    con_pic[i]=new Array();
+
      $.ajax({
          type:'GET',
          url:base_url + '/roleplay/'+ role_id + '/page/'+ pagination ,
          data:{role_id:role_id,pagination:pagination},
+          async: false,
          dataType:'json',
          success:function(data){
-         	if(data.case_content_type==1)
+         	 objs = data;
+         	console.log(objs);
+         	for(k=0;k<objs.page_content.length;k++)
+          {		
+         	if(objs.page_content[k].content_type==1)
          	{
-              con_text.push(data.text_content);
+              con_text[i].push(objs.page_content[k].text_content);
+              console.log(k);
          	}
-         	if(data.case_content_type==3)
+         	if(objs.page_content[k].content_type==3)
          	{
-              con_pic.push(data.picture_address);
+              con_pic[i].push(objs.page_content[k].picture_content.picture_address);
          	}
-          },
+          }
+                                },
           error:function(){
           alert('服务器发生未知错误');
           },
     });
+
+
   }
+  
+
+
+     $("#mainInfo1").text(con_text[0][0]);
+     $("#mainInfo2").text(con_text[0][1]);
+     $("#mainInfo3").text(con_text[0][2]);
+
+
+})
+
 
 function NextPages()
     {
-        var img = document.getElementById("learnImage");
-          var d1=document.getElementById("mainInfo");
-           for (var i = 0;i<con_pic.length-1;i++) {
-               if(img.getAttribute('src')==con_pic[i])
-               {
-                  img.src=con_pic[i+1];
-                  d1.innerHTML=con_text[i+1];
-                  break;
-                
-               }     
-           }
+        for(i=0;i<page_size-1;i++)
+        {
+
+        	if(page_id==i)
+        	{
+             $("#mainInfo1").text(con_text[i+1][0]);
+             $("#mainInfo2").text(con_text[i+1][1]);
+             $("#mainInfo3").text(con_text[i+1][2]);
+             page_id++;
+             break;
+        	}
+        }
+           
+   
 
     return false;
     }
+
 
     function PrePages()
     {
-          
-            var img = document.getElementById("learnImage");
-             var d1=document.getElementById("mainInfo");
-             for (var i = 1;i<con_pic.length;i++) {
-               if(img.getAttribute('src')==con_pic[i])
-               {
-                img.src=con_pic[i-1];
-                d1.innerHTML=con_text[i-1];
-               }
+    	 for(i=1;i<page_size;i++)
+        {
 
-              
-           }
+        	if(page_id==i)
+        	{
+             $("#mainInfo1").text(con_text[i-1][0]);
+             $("#mainInfo2").text(con_text[i-1][1]);
+             $("#mainInfo3").text(con_text[i-1][2]);
+             page_id--;
+             break;
+        	}
+        }
+                  
 
     return false;
+
     }
+
 
 
 </script>
@@ -373,11 +404,33 @@ function NextPages()
                     </div>
                     <div class="wid_blog-right">
                        
-                        <p id ="mainInfo" > first</p><!--主要内容-->
+                        <p id ="mainInfo1" ></p><!--主要内容1-->
  
+                    </div>
+
+
+                    <div class="clearfix"> </div>
+
+
+        <br>
+        <br>
+                    <div class="wid_blog-left">
+                        <img id="learnImage" src="images/s1.jpg" class="img-responsive" alt=""> <!--图片url-->
+                    </div>
+                    <div class="wid_blog-right">         
+                        <p id ="mainInfo2" ></p><!--主要内容2-->
                     </div>
                     <div class="clearfix"> </div>
 
+        <br>
+        <br>
+                    <div class="wid_blog-left">
+                        <img id="learnImage" src="images/s1.jpg" class="img-responsive" alt=""> <!--图片url-->
+                    </div>
+                    <div class="wid_blog-right"> 
+                        <p id ="mainInfo3" ></p><!--主要内容3-->
+                    </div>
+                    <div class="clearfix"> </div>
                   </div>
 
 
