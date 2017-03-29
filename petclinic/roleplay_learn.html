@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>虚拟宠物医院管理系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+  <script type="application/x-javascript">
+  addEventListener("load", function() {
+    setTimeout(hideURLbar, 0);
+  }, false);
+
+  function hideURLbar() {
+    window.scrollTo(0, 1);
+  }
+  </script>
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel='stylesheet' type='text/css' />
+  <!-- Graph CSS -->
+  <link href="css/lines.css" rel='stylesheet' type='text/css' />
+  <link href="css/font-awesome.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="js/jquery.min.js"></script>
+  <!----webfonts--->
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+  <!---//webfonts--->
+  <!-- Nav CSS -->
+  <link href="css/custom.css" rel="stylesheet">
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="js/metisMenu.min.js"></script>
+  <script src="js/custom.js"></script>
+  <!-- Graph JavaScript -->
+  <script src="js/d3.v3.js"></script>
+  <script src="js/rickshaw.js"></script>
+  <script type="text/javascript">
+  var a = new Array('first', 'secoond', 'thrid');
+  var b = new Array('images/s1.jpg', 'images/s2.jpg', 'images/s3.jpg')
+  </script>
+  <style>
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+  }
+  
+  .tabcontent {
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 1s;
+    /* Fading effect takes 1 second */
+  }
+  
+  @-webkit-keyframes fadeEffect {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeEffect {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .page-content {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  .page-content img{
+    max-height: 300px; 
+    max-width: 400px;
+  }
+  .page-content video{
+    max-height: 300px; 
+    max-width: 400px;
+  }
+  </style>
+  <script type="text/javascript">
+  var base_url = 'http://121.42.33.171:8765';
+  var is_manager, token;
+
+  function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+      return unescape(arr[2]);
+    else
+      return null;
+  }
+  //登陆拦截
+  function intercepter() {
+    token = getCookie('token');
+    is_manager = 'true' == getCookie('is_manager');
+    console.log(is_manager);
+    if (token == null /*|| is_manager == false*/ ) {
+      location.href = "login.html";
+      alert('请重新登陆');
+    }
+    console.log(token);
+    return token;
+  }
+  var token = intercepter();
+  $(document).ready(function() {
+    var urlinfo = window.location.href; //获取url
+    console.log(urlinfo);
+    var paramlist = urlinfo.split("?")[1].split("&"); //参数列表，字符串数组，元素形同['aa=1','bb=2']
+    var params = {};
+    if (paramlist.length > 0) {
+      for (i = 0; i < paramlist.length; i++) {
+        kv = paramlist[i]
+        key = kv.split("=")[0];
+        value = kv.split("=")[1];
+        params[key] = value;
+      }
+    }
+    var role_id = params['role_id'];
+    console.log(role_id);
+    $("#item_form").submit(function() {
+      //禁用form默认提交，使用ajax提交
+      return false;
+    });
+
+
+    //获取指定角色扮演信息
+    $.ajax({
+      type: 'GET',
+      url: base_url + '/roleplay/' + role_id,
+      data: {},
+      dataType: 'json',
+      beforeSend: function(request) {
+        console.log(token);
+        request.setRequestHeader("token", token);
+      },
+      success: function(data) {
+        console.log(data);
+        var obj = data;
+        page_size = obj.page_size;
+        for (var i = 0; i < page_size; i++) {
+          page = $("<div class='wid_blog-desc tabcontent'><h3>标题</h3></div>")
+          $("#page_list").append(page);
+        }
+
+        for (var i = 1; i <= page_size; i++) {
+          $.ajax({
+            type: 'GET',
+            url: base_url + '/roleplay/' + role_id + '/page/' + i,
+            data: {},
+            dataType: 'json',
+            beforeSend: function(request) {
+              console.log(token);
+              request.setRequestHeader("token", token);
+            },
+            success: function(data) {
+              console.log(data);
+              var obj = data;
+              pagination = data.page_info.pagination - 1
+              var page = $($("#page_list .tabcontent")[pagination]);
+              // set title
+              $(page.find('h3')[0]).text(data.page_info.page_title);
+
+              var page_wrapper = $("<div class='col-xs-12 activity-desc' id='case_content' style='margin-bottom:50px'></div>");
+              for (var j = 0; j < data.page_content.length; j++) {
+                var content = data.page_content[j];
+                if (content.content_type == 1) {
+                  //text content
+                  var element = $("<p>" + content.text_content + "</p>");
+                  page_wrapper.append(element);
+                } else if (content.content_type == 2) {
+                  //video content
+                  var video = $("<video class='video-js' controls preload='auto' poster='" + base_url + '/' + content.video_content.screenshot + "' data-setup='{}'></video>");
+                  var video_source = $("<source src='" + base_url + '/' + content.video_content.video_address + "' type='video/mp4'></source>");
+                  var video_div = $("<div class='col-xs-12 page-content'></div>");
+                  video.append(video_source);
+                  video_div.append(video);
+                  page_wrapper.append(video_div);
+
+                } else if (content.content_type == 3) {
+                  //picture content
+                  var element = $("<img src='" + base_url + '/' + content.picture_content.picture_address + "' />");
+                  var picture_div = $("<div class='col-xs-12 page-content'></div>");
+                  picture_div.append(element);
+                  page_wrapper.append(picture_div);
+                } else {
+                  alert('invalid content type:' + content.content_type);
+                }
+              }
+
+              page.append(page_wrapper);
+              if (pagination == 0) {
+                set_page(0);
+              }
+            },
+            error: function() {
+              alert('服务器发生未知错误');
+            },
+          });
+        }
+      },
+      error: function() {
+        alert('服务器发生未知错误');
+      },
+    });
+  });
+
+  function set_page(x) {
+    for (i = 0; i < page_size; i++) {
+      $("#page_list .tabcontent")[i].style.display = "none";
+    }
+    $("#page_list .tabcontent")[x].style.display = "block";
+    page_now = x;
+  }
+
+  function NextPages() {
+    if (page_now < page_size - 1) {
+      set_page(page_now + 1);
+    }
+  }
+
+
+  function PrePages() {
+    if (page_now > 0) {
+      set_page(page_now - 1);
+    }
+  }
+  $(function() {
+    $("#navigation").load("nav.html");
+  });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <div id='navigation'></div>
+    <div id="page-wrapper">
+      <div class="graphs">
+        <div class="span_11" id="page_list">
+          <!-- the pages -->
+        </div>
+        <div class="col-md-10 col_1_of_2 span_1_of_2">
+          <div class="col-md-11 col-sm-offset-2">
+            <button id="Previs" class="btn-primary btn" onclick="NextPages()">下翻页</button>
+            <div class="col-md-6 col-sm-offset-2">
+              <button id="NextOne" class="btn-primary btn" onclick="PrePages()">上翻页</button>
+              <div class="clearfix"> </div>
+            </div>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+        <div class="content_bottom">
+          <div class="clearfix"> </div>
+        </div>
+        <div class="copy">
+          <p>Copyright © 2017. All Rights Reserved | Design by <a href="" target="_blank">petclinic</a> </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#page-wrapper -->
+  </div>
+  <!-- /#wrapper -->
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>

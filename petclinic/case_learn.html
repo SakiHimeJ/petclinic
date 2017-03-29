@@ -174,6 +174,10 @@
       },
     });
   });
+  
+  $(function() {
+    $("#navigation").load("nav.html");
+  });
   </script>
   <style>
   body {
@@ -406,73 +410,7 @@
 <body>
 <div id="wrapper">
      <!-- Navigation -->
-        <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">宠物医院后台管理系统</a>
-            </div>
-            <!-- /.navbar-header -->
-			<form class="navbar-form navbar-right">
-              <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
-            </form>
-           <div class="navbar-default sidebar" role="navigation">
-    <div class="sidebar-nav navbar-collapse">
-        <ul class="nav" id="side-menu">
-            <li id="user_list">
-              <a href="#"><i class="fa fa-laptop nav_icon"></i>虚拟医院<span class="fa arrow"></span></a>
-              <ul class="nav nav-second-level collapse in">
-                <li>
-                  <a href="guide.html">医院3D导览</a>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-laptop nav_icon"></i>职能学习<span class="fa arrow"></span></a>
-                  <ul class="nav nav-third-level collapse in">
-                    <li>
-                      <a href="#">角色扮演</a>
-                    </li>
-                    <li>
-                      <a href="case_learn.html">病例学习</a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-              <!-- /.nav-second-level -->
-            </li>
-            <li id="manager_list">
-              <a href="#"><i class="fa fa-laptop nav_icon"></i>后台管理<span class="fa arrow"></span></a>
-              <ul class="nav nav-second-level">
-                <li>
-                  <a href="user_manage.html">用户信息管理</a>
-                </li>
-                <li>
-                  <a href="case_manage.html">病例管理</a>
-                </li>
-                <li>
-                  <a href="tablet_manage.html">药品管理</a>
-                </li>
-                <li>
-                  <a href="fee_manage.html">收费管理</a>
-                </li>
-                <li>
-                  <a href="doc_manage.html">档案管理</a>
-                </li>
-                <li>
-                  <a href="office_manage.html">科室管理</a>
-                </li>
-              </ul>
-              <!-- /.nav-second-level -->
-            </li>
-          </ul>
-        </div>
-        <!-- /.sidebar-collapse -->
-      </div>
-      <!-- /.navbar-static-side -->
-    </nav>
+        <div id='navigation'></div>
     <div id="page-wrapper">
       <div class="graphs">
         <h1 id="case_name">病例学习</h1>
