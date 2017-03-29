@@ -50,7 +50,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     }
     var token = intercepter();
   $(document).ready(function(){
-    $("#edit_depart_form").submit(function(){
+    //获取权限列表
+    var authority_list;
+    $.ajax({
+      type:'GET',
+      url:base_url+'/authority',
+      data:{},
+      dataType:'json',
+      async:false,
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
+      success:function (data) {
+        authority_list=data;
+        for (var i = 0; i < authority_list.length; i++) {
+        var auth=authority_list[i];
+        var checkbox=$('<div class="checkbox-inline"><label><input type="checkbox" id="'+auth.authority_id+'">'+auth.authority_desc+'</label></div>');
+        $("#auth_checkbox").append(checkbox);  
+        }
+        },
+       error:function(){
+                    alert('服务器发生未知错误');
+      },
+    });
+    console.log(authority_list);
+    $("#edit_manager_form").submit(function(){
       //禁用form默认提交，使用ajax提交
       return false;
     });
@@ -66,41 +91,87 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         params[key] = value;
       }
     }
-    var depart_id = params['depart_id'];
-    console.log(depart_id);
+    var manager_id = params['manager_id'];
+     //获取指定权限
+    $.ajax({
+      type:'GET',
+      url:base_url+'/manager/'+manager_id+'/authority',
+      data:{},
+      dataType:'json',
+      beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
+      success:function (data) {
+          console.log(data);
+          var obj=data;
+          for (i = 0;i < obj.length;i ++){
+          var authority=obj[i];
+          $("#"+authority.authority_id).attr("checked",true);
+          };
+        },
+       error:function(){
+                    alert('服务器发生未知错误');
+        },
+    });
     //获取指定用户信息
     $.ajax({
-
       type:'GET',
-      url:base_url + '/depart/'+ depart_id,
-      data:{depart_id:depart_id},
+      url:base_url + '/manager/'+ manager_id,
+      data:{manager_id:manager_id},
       dataType:'json',
       beforeSend: function(request) {
           console.log(token);  
           request.setRequestHeader("token", token);  
       }, 
       success:function(data){
-          $("#depart_name").val(data.depart_name);
-          $("#depart_type").val(data.depart_type);
-          $("#depart_desc").val(data.depart_desc);           
-          },
-          error:function(){
+          $("#username").val(data.manager_name);
+      },
+      error:function(){
           alert('服务器发生未知错误');
-           },
-    });
+      },
+      });
 
-    $("#depart_edit_submit").click(function(){
+    $("#manager_edit_submit").click(function(){
+      console.log
       if(confirm("确认修改？"))
       {
-          depart_name=$("#depart_name").val();
-          depart_type=$("#depart_type").val();
-          depart_desc=$("#depart_desc").val();
+         password = $("#password").val();
+         var auth_list=new Array();
+         for (var i = 0; i < authority_list.length; i++) {
+            if($("#"+authority_list[i].authority_id).is(':checked')){
+              auth_list.push(authority_list[i].authority_id) ;
+            }
+         };
+         console.log(auth_list);
+          $.ajax({
+           type:'PUT',
+           url:base_url+'/manager/'+manager_id+'/authority',
+           data:{auth_list:auth_list},
+           dataType:'json',
+           beforeSend: function(request) {
+           console.log(token);  
+           request.setRequestHeader("token", token);  
+        }, 
+           success:function (data) {
+           console.log(data);
+        },      
+           error:function(){
+                    alert('服务器发生未知错误');
+        },
 
+      });
+          //修改管理员信息
       $.ajax({
          type:'PUT',
-         url:base_url + '/depart/' + depart_id ,
-         data:{depart_name:depart_name,depart_type:depart_type,depart_desc:depart_desc},
+         url:base_url + '/manager/' + manager_id ,
+         data:{password:password},
          dataType:'json',
+         beforeSend: function(request) {
+          console.log(token);  
+          request.setRequestHeader("token", token);  
+      }, 
+
          success:function(data){
           alert('成功修改');
           },
@@ -193,28 +264,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div id="page-wrapper">
         <div class="col-md-12 graphs">
        <div class="xs">
-     <h3>科室管理>>修改科室信息</h3>
+     <h3>用户管理>>修改管理员信息</h3>
      <div>
-       <form class="form-horizontal" id="edit_depart_form">
+       <form class="form-horizontal" id="edit_manager_form">
                 <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">科室名称:</label>
+                  <label for="disabledinput" class="col-sm-2 control-label">用户姓名:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="depart_name" placeholder="Default Input">
+                    <input type="text" class="form-control1" id="username" placeholder="Default Input">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="focusedinput" class="col-sm-2 control-label">科室类别:</label>
+                  <label for="focusedinput" class="col-sm-2 control-label">用户密码:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control1" id="depart_type" placeholder="Default Input">
+                    <input type="text" class="form-control1" id="password" placeholder="Default Input">
                 </div>  
                 </div>
-                <div class="form-group">
-                  <label for="disabledinput" class="col-sm-2 control-label">科室描述:</label>
-                  <div class="col-sm-8">
-                       <textarea  cols="50" rows="4" class="form-control11" id="depart_desc"></textarea></div>
-                  </div>
-                <div class="row"><div class="col-sm-3 col-sm-offset-3">
-                      <button class="btn-success btn" id="depart_edit_submit">Submit</button>
+                <div class="form-group" id="auth_checkbox">
+                <h4 class="col-sm-2 control-label">权限管理:</h4>
+               </div>
+        
+                <div class="row"><div class="col-sm-2 col-sm-offset-5">
+                      <button class="btn-success btn" id="manager_edit_submit">Submit</button>
           </div></div>
           </form>
                 <hr></hr> 
